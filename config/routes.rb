@@ -5,6 +5,7 @@ VideoshowV2::Application.routes.draw do
     namespace :v1 do
       get '/media/popular' => 'media#popular'
       post '/media/tag_search' => 'media#tag_search'
+      post '/media/tag_recent_media' => 'media#tag_recent_media'
       get '/oauth/connect' => 'oauth#connect'
       get '/oauth/callback' => 'oauth#callback'
       get '/users/feed' => 'users#feed'

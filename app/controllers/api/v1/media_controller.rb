@@ -1,17 +1,35 @@
+require 'timeout'
+
 class Api::V1::MediaController < Api::BaseController
   def popular
-    instagrams = Instagram.media_popular
+    instagrams = 'timeout'
+    begin
+    timeout(2) {
+      instagrams = Instagram.media_popular
+    }
     render json: instagrams.to_json
+    rescue TimeoutError
+       render json: "Timed Out".to_json
+    end
   end
 
   def tag_search
     # tag_search
-    instagrams = Instagram.tag_search(params[:tag])
-    render json: instagrams.to_json
+    #client = Instagram.client(:access_token => session[:access_token])
+    instagrams = 'timeout'
+    begin
+      timeout(2) {
+        instagrams = Instagram.tag_search(params[:tag])
+      }
+      render json: instagrams.to_json
+    rescue TimeoutError
+       render json: "Timed Out".to_json
+    end
+    
   end
 
   def tag_recent_media
-    instagrams = Instagram.tag_recent_media
+    instagrams = Instagram.tag_recent_media(params[:tag], {count: 3})
     render json: instagrams.to_json
   end
 
