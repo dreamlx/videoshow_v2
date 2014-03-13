@@ -10,6 +10,9 @@ gem 'oj'
 gem 'therubyracer'
 gem 'capistrano', '~> 3.1'
 
+gem 'mongoid', '~>3'
+gem "bson_ext"
+
 gem "koala", "~> 1.8.0rc1" #facebook api
 gem "instagram"
 gem 'haml'

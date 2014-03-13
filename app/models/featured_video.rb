@@ -1,10 +1,17 @@
-class FeaturedVideo < ActiveRecord::Base
+class FeaturedVideo
   # attr_accessible :title, :body
-  def self.tag_recent_media(tag,count)
-    instagrams = []
+  include Mongoid::Document
+  field :instagram_collection, :type => Hash
+
+  def self.tag_recent_media(tag='videoshow',count=30)
+    instagrams = self.new
     FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do
-      timeout(15){ tag_recent_media(tag, { count: count }) }
+      timeout(15) do
+        instagrams.instagram_collection = Instagram.tag_recent_media(tag, { count: count })
+        instagrams.save
+      end
     end
+    return instagrams
   end
 
   def self.retryable(options = {})
@@ -19,7 +26,7 @@ class FeaturedVideo < ActiveRecord::Base
         sleep 2
         retry 
       else
-        logger.info 'TimeOut:get tag_search'
+        logger.info 'TimeOut:get tag_recent_media'
       end
     end
   end
