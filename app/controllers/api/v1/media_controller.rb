@@ -1,6 +1,18 @@
 require 'timeout'
 
 class Api::V1::MediaController < Api::BaseController
+  def featured_collection
+    instagrams = []
+    begin
+    timeout(2) {
+      instagrams = FeaturedVideo.last.instagram_collection
+    }
+    render json: instagrams.to_json
+    rescue TimeoutError
+       render json: "Timed Out".to_json
+    end
+  end
+
   def popular
     instagrams = 'timeout'
     begin
