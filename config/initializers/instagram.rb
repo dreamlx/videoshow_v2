@@ -1,4 +1,3 @@
-require "instagram"
 
 # All methods require authentication (either by client ID or access token).
 # To get your Instagram OAuth credentials, register an app at http://instagr.am/oauth/client/register/

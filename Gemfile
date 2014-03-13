@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-
+gem 'whenever', :require => false
 gem 'videojs_rails'
 gem 'jquery_mobile_rails'
 gem 'unicorn'

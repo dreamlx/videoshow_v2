@@ -29,7 +29,7 @@ class Api::V1::MediaController < Api::BaseController
   end
 
   def tag_recent_media
-    instagrams = Instagram.tag_recent_media(params[:tag], {count: 3})
+    instagrams = Instagram.tag_recent_media(params[:tag], {count: 5})
     render json: instagrams.to_json
   end
 
