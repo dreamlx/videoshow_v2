@@ -1,11 +1,12 @@
 #roadmap
 * 输出tag search json api(完成)
 * 使用whenever 后台自动周期执行 tag search， 搜索 官方账号likes（完成）
-* 增加capistrano支持
+* 增加capistrano，自动部署支持
 * 缓存搜索结果，和存储结果做比较，保持差异部分
 * 使用monagodb作为json数据库
 * 生成publish 输出结果，缓存到内存
 * 寻找阿里云部署方案
+* 写一个jquery mobile 客户端
 
 ======================
 

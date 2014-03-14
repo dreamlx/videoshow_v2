@@ -8,7 +8,11 @@ gem 'unicorn'
 gem 'rabl'
 gem 'oj'
 gem 'therubyracer'
+
 gem 'capistrano', '~> 3.1'
+gem 'capistrano-rails', '~> 1.1'
+gem 'capistrano-rvm'
+gem 'capistrano-bundler', '>= 1.1.0'
 
 gem 'mongoid', '~>3'
 gem "bson_ext"
