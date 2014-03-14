@@ -9,7 +9,7 @@
 * 寻找阿里云部署方案
 * 写一个jquery mobile 客户端
 
-======================
+---
 
 # 使用redis-store
     https://github.com/redis-store/redis-store
@@ -26,3 +26,9 @@ rails 配置 (http://www.oschina.net/question/213217_58914)
 
 # whenever
 https://github.com/javan/whenever
+
+--------------
+# 安装步骤
+安装postgres 数据库
+    apt-get install -y postgresql-9.1 postgresql-client-9.1 postgresql-contrib-9.1 postgresql-server-dev-9.1 
+http://blog.sina.com.cn/s/blog_6af33caa0100ypck.html

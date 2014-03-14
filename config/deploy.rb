@@ -46,6 +46,12 @@ namespace :deploy do
       # execute :touch, release_path.join('tmp/restart.txt')
     end
   end
+  
+  before :publishing, :change_permission do
+    on roles(:web) do
+      execute "chmod -R 766 /var/www/video_show/shared"
+    end
+  end
 
   after :publishing, :restart
 
