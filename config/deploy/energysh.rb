@@ -16,7 +16,7 @@ role :db,  %w{192.168.1.64}
 # extended properties on the server.
 server '192.168.1.64', user: 'root', roles: %w{web app}, my_property: :my_value
 
-set :rvm_ruby_version, '2.0.0'      # Defaults to: 'default'
+#set :rvm_ruby_version, '2.0.0'      # Defaults to: 'default'
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
