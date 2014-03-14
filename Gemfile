@@ -23,7 +23,6 @@ gem 'haml'
 gem "pry"
 gem 'pry-rails'
 gem 'pg'
-ruby '2.0.0'
 
 gem 'devise'
 gem 'figaro'
