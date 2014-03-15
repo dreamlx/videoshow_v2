@@ -27,6 +27,13 @@ rails 配置 (http://www.oschina.net/question/213217_58914)
 # whenever
 https://github.com/javan/whenever
 
+    Update the crontab
+    After setting up the rake task, you need to run following command in the console to tell Whenever to start running your periodic tasks:
+
+`whenever --update-crontab`
+
+    If you want to check that the gem correctly scheduled your cron task, you can use the command “crontab -l” to list all cron tasks.
+
 --------------
 # 安装步骤
 ## 安装postgres 数据库
@@ -35,3 +42,5 @@ http://blog.sina.com.cn/s/blog_6af33caa0100ypck.html
 
 ## mongodb
 http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
+
+

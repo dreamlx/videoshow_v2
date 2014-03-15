@@ -21,5 +21,5 @@
 
 set :environment, "development"
 every 3.minutes do
-  runner 'FeaturedVideo.tag_recent_media(videoshow,30)'
+  runner "FeaturedVideo.tag_recent_media('videoshow',30)"
 end
