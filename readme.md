@@ -29,6 +29,9 @@ https://github.com/javan/whenever
 
 --------------
 # 安装步骤
-安装postgres 数据库
+## 安装postgres 数据库
     apt-get install -y postgresql-9.1 postgresql-client-9.1 postgresql-contrib-9.1 postgresql-server-dev-9.1 
 http://blog.sina.com.cn/s/blog_6af33caa0100ypck.html
+
+## mongodb
+http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/

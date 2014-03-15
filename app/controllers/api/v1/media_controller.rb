@@ -7,9 +7,10 @@ class Api::V1::MediaController < Api::BaseController
     timeout(2) {
       instagrams = FeaturedVideo.last.instagram_collection
     }
-    render json: instagrams.to_json
+    #filter_video = instagrams.map{ |instagram| instagram.videos.blank? instagram : ''}
+    render json: instagrams.to_json, :callback => params[:callback]
     rescue TimeoutError
-       render json: "Timed Out".to_json
+       render json: "Timed Out".to_json, :callback => params[:callback]
     end
   end
 
