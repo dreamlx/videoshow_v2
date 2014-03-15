@@ -18,6 +18,6 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-every :hour do
+every 3.minutes do
   runner 'FeaturedVideo.tag_recent_media(videoshow,30)'
 end
