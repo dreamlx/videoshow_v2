@@ -2,13 +2,15 @@ class FeaturedVideo
   # attr_accessible :title, :body
   include Mongoid::Document
   field :instagram_collection, :type => Hash
+  field :instagram_item, :type => Hash
 
   def self.tag_recent_media(tag='videoshow',count=30)
     instagrams = self.new
     FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do
       timeout(15) do
-        instagrams.instagram_collection = Instagram.tag_recent_media(tag, { count: count })
-        instagrams.save
+        instagram_collection = Instagram.tag_recent_media(tag, { count: count })
+        instagram_collection.map{ |i| i unless i.videos.blank? }
+        instagram_collection.compact.each { |item| self.create!(instagram_item: item)}
       end
     end
     return instagrams
