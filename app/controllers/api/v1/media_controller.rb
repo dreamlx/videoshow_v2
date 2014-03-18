@@ -5,7 +5,7 @@ class Api::V1::MediaController < Api::BaseController
     instagrams = []
     begin
     timeout(2) {
-      instagrams = FeaturedVideo.last.instagram_collection
+      instagrams = FeaturedVideo.all
     }
     #filter_video = instagrams.map{ |instagram| instagram.videos.blank? instagram : ''}
     render json: instagrams.to_json, :callback => params[:callback]
