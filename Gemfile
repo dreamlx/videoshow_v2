@@ -15,6 +15,7 @@ gem 'capistrano-rvm'
 gem 'capistrano-bundler', '>= 1.1.0'
 
 gem 'mongoid', '~>3'
+gem "will_paginate_mongoid"
 gem "bson_ext"
 
 gem "koala", "~> 1.8.0rc1" #facebook api
