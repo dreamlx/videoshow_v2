@@ -4,15 +4,16 @@
 lock '3.1.0'
 
 set :application, 'videoshow'
+#set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 
 #set :rvm_type, :system                     # Defaults to: :auto
-set :rvm_ruby_version, 'ruby-2.0.0@videoshow'      # Defaults to: 'default'
+#set :rvm_ruby_version, 'ruby-2.0.0-p451@videoshow'      # Defaults to: 'default'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/var/www/video_show'
+set :deploy_to, '/var/www/videoshow'
 
 # Default value for :scm is :git
 set :scm, :git
