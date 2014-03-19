@@ -9,7 +9,7 @@ class FeaturedVideo
       timeout(15) do
         instagram_collection = Instagram.tag_recent_media(tag, { count: count })
         instagram_collection.each do |item|
-          self.create!(instagram_item: item) if !item.videos.nil? and !item.videos.blank? and FeaturedVideo.where(:'instagram_item.id' => item[:id]).first.nil?
+          self.create!(instagram_item: item) if item.type == 'video' and FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
         end
       end
     end
