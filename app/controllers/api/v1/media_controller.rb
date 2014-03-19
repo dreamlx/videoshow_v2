@@ -35,7 +35,6 @@ class Api::V1::MediaController < Api::BaseController
     rescue TimeoutError
        render json: "Timed Out".to_json
     end
-    
   end
 
   def tag_recent_media
