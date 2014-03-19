@@ -2,12 +2,8 @@ require 'timeout'
 
 class Api::V1::MediaController < Api::BaseController
   def featured_collection
-    if params[:page].nil?
-      page =  0
-    else
-      page = params[:page].to_i
-    end
-    instagrams = FeaturedVideo.skip(20*page).limit(20)
+    page = params[:page].to_i
+    instagrams = FeaturedVideo.skip(20*page).limit(50)
     render json: instagrams.to_json, :callback => params[:callback]
   end
 
