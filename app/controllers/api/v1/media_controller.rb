@@ -3,7 +3,7 @@ require 'timeout'
 class Api::V1::MediaController < Api::BaseController
   def featured_collection
     page = params[:page].to_i
-    instagrams = FeaturedVideo.where(:"instagram_item.videos".nin => [nil, ""]).desc(:"instagram_item.created_on").skip(10*page).limit(10)
+    instagrams = FeaturedVideo.where(:"instagram_item.videos".nin => [nil, ""]).desc(:"instagram_item.created_time").skip(10*page).limit(10)
     render json: instagrams.to_json, :callback => params[:callback]
   end
 
