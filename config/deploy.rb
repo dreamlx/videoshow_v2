@@ -4,11 +4,9 @@
 lock '3.1.0'
 
 set :application, 'videoshow'
-#set :default_env, { rvm_bin_path: '~/.rvm/bin' }
 
-#set :rvm_type, :system                     # Defaults to: :auto
-#set :rvm_ruby_version, 'ruby-2.0.0-p451@videoshow'      # Defaults to: 'default'
-
+set :rvm_type, :system                     # Defaults to: :auto
+set :rvm_ruby_version, 'ruby-2.0.0-p451@videoshow'      # Defaults to: 'default'
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
