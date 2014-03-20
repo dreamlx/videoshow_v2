@@ -26,7 +26,7 @@ class FeaturedVideo
     rescue retry_exception
       if (retries -= 1) > 0
         sleep 2
-        retry 
+        retry
       else
         logger.info 'TimeOut:get tag_recent_media'
       end
