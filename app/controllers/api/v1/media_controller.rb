@@ -5,7 +5,7 @@ class Api::V1::MediaController < Api::BaseController
     page = params[:page].to_i
         blacklist = []
     BlackList.all.each {|b| blacklist << b.username}
-    instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.order_by_top.instagram_desc.paginate(:page => params[:page])
+    instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.instagram_desc.paginate(:page => params[:page])
     render json: instagrams.to_json, :callback => params[:callback]
   end
 
