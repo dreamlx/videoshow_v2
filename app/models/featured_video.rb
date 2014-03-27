@@ -2,6 +2,22 @@ class FeaturedVideo
   # attr_accessible :title, :body
   include Mongoid::Document
   field :instagram_item, :type => Hash
+  field :order_no, :type => Integer, default: 0
+  field :block_status, :type => Boolean, default: false
+
+  default_scope desc(:"order_no")
+  scope :has_video, where(:"instagram_item.videos".nin => [nil, ""])
+  scope :instagram_desc, desc(:"instagram_item.created_time")
+  scope :instagram_asc, asc(:"instagram_item.created_time")
+
+  def self.filter_blacklist(blacklist)
+    where(:"instagram_item.user.username".nin => blacklist)
+  end
+
+  def gotop!
+    self.order_no = FeaturedVideo.first.order_no + 1
+    self.save
+  end
 
   def self.tag_recent_media(tag='videoshow',count=300)
     instagrams = self.new

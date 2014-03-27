@@ -2,10 +2,10 @@ require 'timeout'
 
 class Api::V1::MediaController < Api::BaseController
   def featured_collection
-    blacklist = []
-    BlackList.all.each {|b| blacklist << b.username}
     page = params[:page].to_i
-    instagrams = FeaturedVideo.where(:"instagram_item.videos".nin => [nil, ""], :"instagram_item.user.username".nin => blacklist).desc(:"instagram_item.created_time").skip(10*page).limit(10)
+        blacklist = []
+    BlackList.all.each {|b| blacklist << b.username}
+    instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.order_by_top.instagram_desc.paginate(:page => params[:page])
     render json: instagrams.to_json, :callback => params[:callback]
   end
 
