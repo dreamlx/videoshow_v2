@@ -4,11 +4,14 @@ ActiveAdmin.register FeaturedVideo do
     column  :username do |item|
       item.instagram_item["user"]["username"]
     end
-    column :profile_img do |item|
-      image_tag item.instagram_item["user"]["profile_picture"]
-    end
     column :imges do |item|
       image_tag item.instagram_item["images"]["low_resolution"]["url"]
+    end
+    column :tags do |item|
+      item.instagram_item["tags"]
+    end
+    column :created_time do |item|
+      item.instagram_item["created_time"]
     end
     default_actions
   end

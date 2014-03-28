@@ -19,6 +19,13 @@ class FeaturedVideo
     self.save
   end
 
+  def self.update_last(count)
+    self.all.limit(count).each do |item|
+      item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
+      item.save
+    end
+  end
+
   def self.tag_recent_media(tag='videoshow',count=300)
     instagrams = self.new
     FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do

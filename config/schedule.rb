@@ -21,6 +21,11 @@
 
 set :environment, "development"
 
-every 1.minutes do
-  runner "FeaturedVideo.tag_recent_media"
+every 3.minutes do
+  runner "Category.get_all_tags"
+  runner "FeaturedVideo.update_last(100)"
+end
+
+every 60.minutes do
+  runner "FeaturedVideo.update_last(300)"
 end
