@@ -11,7 +11,7 @@ ActiveAdmin.register FeaturedVideo do
       item.instagram_item["tags"]
     end
     column :created_time do |item|
-      item.instagram_item["created_time"]
+      Date.strptime(item.instagram_item["created_time"],"%s")
     end
     default_actions
   end
