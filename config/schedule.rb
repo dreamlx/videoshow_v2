@@ -23,9 +23,8 @@ set :environment, "development"
 
 every 3.minutes do
   runner "Category.get_all_tags"
-  runner "FeaturedVideo.update_last(100)"
 end
 
-every 60.minutes do
-  runner "FeaturedVideo.update_last(300)"
+every 5.minutes do
+  runner "FeaturedVideo.clear_bad_item"
 end

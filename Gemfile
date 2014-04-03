@@ -9,7 +9,7 @@ gem 'unicorn'
 gem 'rabl'
 gem 'oj'
 gem 'therubyracer'
-
+gem "typhoeus"
 gem 'capistrano', '~> 3.1'
 gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-rvm'

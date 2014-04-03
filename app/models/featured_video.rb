@@ -20,13 +20,6 @@ class FeaturedVideo
     self.save
   end
 
-  def self.update_last(count)
-    self.all.limit(count).each do |item|
-      item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
-      item.save
-    end
-  end
-
   def self.tag_recent_media(tag='videoshow',count=300)
     instagrams = self.new
     FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do
@@ -59,6 +52,20 @@ class FeaturedVideo
         retry
       else
         logger.info 'TimeOut:get tag_recent_media'
+      end
+    end
+  end
+
+  def self.clear_bad_item
+    self.all.limit(500).each do |item|
+      request = Typhoeus.get(item.instagram_item['images']['thumbnail'])
+      if request.code == 0
+        item.delete
+      else
+        if Typhoeus.get(item.instagram_item['user']['profile_picture']).code == 0
+          item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
+          item.save
+        end
       end
     end
   end
