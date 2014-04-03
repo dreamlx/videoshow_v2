@@ -16,7 +16,12 @@ class FeaturedVideo
   end
 
   def gotop!
-    self.order_no = FeaturedVideo.first.order_no + 1
+    self.order_no = FeaturedVideo.desc(:"order_no").first.order_no + 2
+    self.save
+  end
+
+  def uncommend!
+    self.order_no = 0
     self.save
   end
 
