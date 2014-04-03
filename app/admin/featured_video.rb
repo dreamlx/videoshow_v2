@@ -5,8 +5,14 @@ ActiveAdmin.register FeaturedVideo do
     column  :username do |item|
       item.instagram_item["user"]["username"]
     end
-    column :imges do |item|
-      image_tag item.instagram_item["images"]["low_resolution"]["url"]
+    column :image do |item|
+      image_tag item.instagram_item["images"]["thumbnail"]["url"]
+    end
+    column :video do |item|
+      video_tag item.instagram_item["videos"]["low_resolution"]["url"],
+        :controls => true,
+        :autobuffer => true,
+        :poster => item.instagram_item["images"]["low_resolution"]["url"]
     end
     column :tags do |item|
       item.instagram_item["tags"]
