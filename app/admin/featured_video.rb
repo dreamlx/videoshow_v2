@@ -23,6 +23,14 @@ ActiveAdmin.register FeaturedVideo do
     column :created_time do |item|
       Date.strptime(item.instagram_item["created_time"],"%s")
     end
+
+    column :recommend do |item|
+      if item.order_no > 0
+        button_to('uncommend', uncommend_admin_featured_video_path(item), :method => :put) 
+      else
+        button_to('Recommend', recommend_admin_featured_video_path(item), :method => :put)
+      end
+    end
     default_actions
   end
 
