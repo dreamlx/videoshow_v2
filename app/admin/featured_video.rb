@@ -1,5 +1,6 @@
-ActiveAdmin.register FeaturedVideo do     
-  index do                            
+ActiveAdmin.register FeaturedVideo do
+
+  index do
     column :order_no
     column  :username do |item|
       item.instagram_item["user"]["username"]

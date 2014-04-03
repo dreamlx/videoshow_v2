@@ -11,7 +11,7 @@ VideoshowV2::Application.routes.draw do
       get '/media/popular' => 'media#popular'
       get '/media/featured_collection' => 'media#featured_collection'
       post '/media/tag_search' => 'media#tag_search'
-      post '/media/tag_recent_media' => 'media#tag_recent_media'
+      get '/media/tag_recent_media' => 'media#tag_recent_media'
       get '/oauth/connect' => 'oauth#connect'
       get '/oauth/callback' => 'oauth#callback'
       get '/users/feed' => 'users#feed'

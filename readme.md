@@ -1,13 +1,4 @@
 #roadmap
-* 输出tag search json api(完成)
-* 使用whenever 后台自动周期执行 tag search， 搜索 官方账号likes（完成）
-* 增加capistrano，自动部署支持(complete)
-* 优化设置capistrano,实现一键自动bundle gem
-* 缓存搜索结果，和存储结果做比较，保持差异部分
-* 使用monagodb作为json数据库
-* 生成publish 输出结果，缓存到内存
-* 寻找阿里云部署方案
-* 写一个jquery mobile 客户端
 
 ---
 
@@ -36,11 +27,24 @@ https://github.com/javan/whenever
 
 --------------
 # 安装步骤
-## 安装postgres 数据库
-    apt-get install -y postgresql-9.1 postgresql-client-9.1 postgresql-contrib-9.1 postgresql-server-dev-9.1 
-http://blog.sina.com.cn/s/blog_6af33caa0100ypck.html
-
 ## mongodb
 http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 
+## 建立服务器环境
+## 安装 rvm/ruby/passenger/nginx/git
+http://ruby-china.org/wiki/install-rails-on-ubuntu-12-04-server
 
+## clone 项目到本地
+git clone git://github.com/dreamlx/videoshow_v2.git
+
+## 自动部署
+采用capistrano, 修改文件项目config/deploy.rb和config/deploy/production.rb
+
+## 初始化服务器部署目录
+    $cap production deploy
+
+## cp 基础设置文件到服务器
+
+`$scp ./config/schedule.rb root@api.videoshowapp.com:/var/www/video_show/shared/config`
+
+`$scp ./config/mongoid.yml root@api.videoshowapp.com:/var/www/video_show/shared/config`

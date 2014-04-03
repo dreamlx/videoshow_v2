@@ -5,10 +5,11 @@ class FeaturedVideo
   field :order_no, :type => Integer, default: 0
   field :block_status, :type => Boolean, default: false
 
-  default_scope desc(:"order_no, instagram_item.created_time")
+  default_scope desc(:"instagram_item.created_time")
   scope :has_video, where(:"instagram_item.videos".nin => [nil, ""])
   scope :instagram_desc, desc(:"instagram_item.created_time")
   scope :instagram_asc, asc(:"instagram_item.created_time")
+  scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
 
   def self.filter_blacklist(blacklist)
     where(:"instagram_item.user.username".nin => blacklist)
