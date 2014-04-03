@@ -34,8 +34,6 @@ class FeaturedVideo
           if item.type == 'video'
             if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
               self.create!(instagram_item: item)
-            else
-              FeaturedVideo.where(:'instagram_item.id' => item.id).update(instagram_item: item)
             end
           end
         end
