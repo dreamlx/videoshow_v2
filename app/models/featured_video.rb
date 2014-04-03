@@ -63,7 +63,7 @@ class FeaturedVideo
 
   def self.clear_bad_item
     self.all.limit(500).each do |item|
-      request = Typhoeus.get(item.instagram_item['images']['thumbnail'])
+      request = Typhoeus.get(item.instagram_item['images']['thumbnail']['url'])
       if request.code == 0
         item.delete
       else

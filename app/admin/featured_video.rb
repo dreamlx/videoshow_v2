@@ -1,5 +1,5 @@
 ActiveAdmin.register FeaturedVideo do
-  filter :order_no
+  config.filters =false
   actions :all, except: [:edit, :new] 
 
   index do
