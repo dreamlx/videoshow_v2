@@ -33,18 +33,15 @@ http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 ## 建立服务器环境
 ## 安装 rvm/ruby/passenger/nginx/git
 http://ruby-china.org/wiki/install-rails-on-ubuntu-12-04-server
+    
+    rvm install 2.1.1  # ruby last version
 
 ## clone 项目到本地
 git clone git://github.com/dreamlx/videoshow_v2.git
 
-## 自动部署
-采用capistrano, 修改文件项目config/deploy.rb和config/deploy/production.rb
+## bundle 本地环境
+    $ cd videoshow_v2
+    $ bundle install
 
-## 初始化服务器部署目录
-    $cap production deploy
-
-## cp 基础设置文件到服务器
-
-`$scp ./config/schedule.rb root@api.videoshowapp.com:/var/www/video_show/shared/config`
-
-`$scp ./config/mongoid.yml root@api.videoshowapp.com:/var/www/video_show/shared/config`
+## backup & restore
+http://docs.mongodb.org/manual/tutorial/backup-with-mongodump/
