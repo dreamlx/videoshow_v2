@@ -45,3 +45,10 @@ git clone git://github.com/dreamlx/videoshow_v2.git
 
 ## backup & restore
 http://docs.mongodb.org/manual/tutorial/backup-with-mongodump/
+
+## 安装信息
+1. 程序安装路径： /home/ubuntu/www/videoshow_v2
+2. 更新方式: $git pull origin master # 从 github抓差异代码
+3. nginx安装路径 /opt/nginx
+3. 网站conf, /opt/nginx/conf/niginx.conf
+4. 如何重启服务： $sudo service nginx restart

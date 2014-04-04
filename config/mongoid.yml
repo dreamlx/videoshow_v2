@@ -81,7 +81,7 @@ test:
 production:
   sessions:
     default:
-      database: videoshow_v2_prodction
+      database: videoshow_v2_development
       hosts:
         - localhost:27017
       options:
