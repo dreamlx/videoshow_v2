@@ -17,6 +17,9 @@ ActiveAdmin.register FeaturedVideo do
         :poster => item.instagram_item["images"]["low_resolution"]["url"],
         :size => '200x200'
     end
+    column :link do |item|
+      item.instagram_item["link"]
+    end
     column :tags do |item|
       item.instagram_item["tags"]
     end

@@ -42,6 +42,7 @@ git clone git://github.com/dreamlx/videoshow_v2.git
 ## bundle 本地环境
     $ cd videoshow_v2
     $ bundle install
+    $ whenever --update-crontab
 
 ## backup & restore
 http://docs.mongodb.org/manual/tutorial/backup-with-mongodump/
