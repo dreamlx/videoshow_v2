@@ -1,0 +1,14 @@
+%ul
+  - @instagrams.each do |item|
+    %li
+      .profile
+        .user-name
+          = item["instagram_item"]["user"]["username"]
+        .profile-picture
+          = image_tag item["instagram_item"]["user"]["profile_picture"]
+        .created_time
+          = Time.at(item["instagram_item"]["created_time"].to_i).strftime("%m-%d-%Y")
+
+      = videojs_rails sources:{ mp4: item["instagram_item"]["videos"]["low_resolution"]["url"] }, width: "400", height: "400", poster: item["instagram_item"]["images"]["low_resolution"]["url"]
+
+= will_paginate @instagrams

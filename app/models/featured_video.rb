@@ -15,11 +15,6 @@ class FeaturedVideo
     where(:"instagram_item.user.username".nin => blacklist)
   end
 
-  def gotop!
-    self.order_no = FeaturedVideo.desc(:"order_no").first.order_no + 2
-    self.save
-  end
-
   def uncommend!
     self.order_no = 0
     self.save
@@ -60,7 +55,7 @@ class FeaturedVideo
   end
 
   def self.clear_bad_item
-    self.all.limit(500).each do |item|
+    self.all.limit(300).each do |item|
       request = Typhoeus.get(item.instagram_item['images']['thumbnail']['url'])
       if request.code == 0
         item.delete

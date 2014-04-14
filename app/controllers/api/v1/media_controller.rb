@@ -10,6 +10,15 @@ class Api::V1::MediaController < Api::BaseController
     render json: instagrams.to_json, :callback => params[:callback]
   end
 
+  def tag_recent_media
+    page = params[:page]
+    page = 15 if page.to_i > 15
+        blacklist = []
+    BlackList.all.each {|b| blacklist << b.username}
+    instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    render json: instagrams.to_json, :callback => params[:callback]
+  end
+  
   def popular
     instagrams = 'timeout'
     begin
@@ -34,15 +43,6 @@ class Api::V1::MediaController < Api::BaseController
     rescue TimeoutError
        render json: "Timed Out".to_json
     end
-  end
-
-  def tag_recent_media
-    page = params[:page]
-    page = 15 if page.to_i > 15
-        blacklist = []
-    BlackList.all.each {|b| blacklist << b.username}
-    instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
-    render json: instagrams.to_json, :callback => params[:callback]
   end
 
   def user_search

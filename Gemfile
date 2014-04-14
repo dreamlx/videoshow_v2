@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem 'activeadmin-mongoid'
 gem 'rails', '3.2.13'
 gem 'whenever', :require => false
