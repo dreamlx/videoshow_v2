@@ -12,7 +12,7 @@ class Api::V1::OauthController < Api::BaseController
     response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK)
     session[:access_token] = response.access_token
     #TOKEN = '789981918.80d957c.f408bb1006844250907d9d2a34df66c4'
-    render json: {code: 'success', token: session[:access_token]}
+    render json: {code: 'success', access_token: session[:access_token]}
   end
 
 end

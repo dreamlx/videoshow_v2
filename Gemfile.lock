@@ -113,6 +113,7 @@ GEM
       cucumber (>= 1.2.0)
       nokogiri (>= 1.5.0)
       rails (>= 3.0.0)
+    curb (0.8.5)
     database_cleaner (1.0.1)
     debug_inspector (0.0.2)
     devise (3.2.3)
@@ -343,6 +344,7 @@ DEPENDENCIES
   carrierwave-mongoid
   coffee-rails (~> 3.2.1)
   cucumber-rails
+  curb
   database_cleaner (= 1.0.1)
   devise
   email_spec

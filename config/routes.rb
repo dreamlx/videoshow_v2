@@ -12,6 +12,10 @@ VideoshowV2::Application.routes.draw do
       get '/oauth/connect' => 'oauth#connect'
       get '/oauth/callback' => 'oauth#callback'
       get '/users/feed' => 'users#feed'
+      post '/media/like_media' => 'media#like_media'
+      delete '/media/unlike_media' => 'media#unlike_media'
+      get '/media/likes' => 'media#likes'
+      get '/media/show' => 'media#show'
 
       resources :clientlogs
     end

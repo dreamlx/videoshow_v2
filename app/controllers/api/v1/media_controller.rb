@@ -18,7 +18,48 @@ class Api::V1::MediaController < Api::BaseController
     instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
     render json: instagrams.to_json, :callback => params[:callback]
   end
-  
+
+  def likes
+    if params[:access_token].blank? or params[:media_id].blank?
+      render json:  {code: 400, message: 'miss access_token or media_id'}
+    else
+      url = "https://api.instagram.com/v1/media/#{params[:media_id]}/likes?access_token=#{params[:access_token]}"
+      result2 = JSON.parse(Typhoeus.get(url).body)
+      render json:  result2
+    end
+  end
+
+  def show
+    if params[:access_token].blank? or params[:media_id].blank?
+      render json:  {code: 400, message: 'miss access_token or media_id'}
+    else
+      url = "https://api.instagram.com/v1/media/#{params[:media_id]}?access_token=#{params[:access_token]}"
+      result2 = JSON.parse(Typhoeus.get(url).body)
+      render json:  result2
+    end
+  end
+
+  def like_media
+    if params[:access_token].blank? or params[:media_id].blank?
+      render json: {code: 400, message: 'miss access_token or media_id'}
+    else
+      #todo
+      url = "https://api.instagram.com/v1/media/#{params[:media_id]}"
+      result2 = JSON.parse(Typhoeus.post(url, body: { access_token: params[:access_token] }).body)
+      render json:  result2
+    end
+  end
+
+  def unlike_media
+    if params[:access_token].blank? or params[:media_id].blank?
+      render json: {code: 400, message: 'miss access_token or media_id'}
+    else
+      client = Instagram.client(:access_token => params[:access_token])
+      result  = client.unlike_media(params[:media_id])
+      render json: result.to_json
+    end
+  end
+
   def popular
     instagrams = 'timeout'
     begin
