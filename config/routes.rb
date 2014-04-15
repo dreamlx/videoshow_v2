@@ -5,28 +5,36 @@ VideoshowV2::Application.routes.draw do
   match "home" => 'home#index'
   namespace :api do
     namespace :v1 do
-      get '/media/popular' => 'media#popular'
-      get '/media/featured_collection' => 'media#featured_collection'
-      post '/media/tag_search' => 'media#tag_search'
-      get '/media/tag_recent_media' => 'media#tag_recent_media'
+      resources :clientlogs
       get '/oauth/connect' => 'oauth#connect'
       get '/oauth/callback' => 'oauth#callback'
       get '/users/feed' => 'users#feed'
-      post '/media/like_media' => 'media#like_media'
-      delete '/media/unlike_media' => 'media#unlike_media'
-      get '/media/likes' => 'media#likes'
-      get '/media/show' => 'media#show'
 
-      resources :clientlogs
+      resources :medium do
+        collection do
+          get 'featured'
+          get 'recent'
+          get 'tag_search'
+        end
+
+        member do
+          get 'likes'
+          post 'like_media'
+          delete 'unlike_media'
+        end
+      end
     end
   end
 
+=begin
   resources :medium do
     collection do
       get 'recent'
       get 'featured'
     end
   end
+=end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
