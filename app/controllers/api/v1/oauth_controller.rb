@@ -5,7 +5,7 @@ class Api::V1::OauthController < Api::BaseController
   end
 
   def connect
-    redirect_to Instagram.authorize_url(:redirect_uri => CALLBACK)
+    redirect_to Instagram.authorize_url(:redirect_uri => CALLBACK, scope: 'comments+likes+basic')
   end
 
   def callback
