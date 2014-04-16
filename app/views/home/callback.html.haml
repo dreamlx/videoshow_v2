@@ -1,0 +1,7 @@
+:javascript
+  $(document).ready(function() {
+    login_interface.info(#{session[:access_token]});
+  });
+
+%h3
+  = session[:access_token]

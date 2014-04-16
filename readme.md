@@ -53,3 +53,30 @@ http://docs.mongodb.org/manual/tutorial/backup-with-mongodump/
 3. nginx安装路径 /opt/nginx
 3. 网站conf, /opt/nginx/conf/niginx.conf
 4. 如何重启服务： $sudo service nginx restart
+
+## api
+* instagram认证
+`http://api.videoshowapp.com:8087/api/v1/oauth/connect`
+
+action:get
+
+result:
+
+    {"code":"success","result":{"access_token":"789981918.80d957c.f408bb1006844250907d9d2a34df66c4","user":{"username":"videoshowapp","bio":"VideoShow:  Create awesome video from your photos,videos, with beautiful music, text, effects.  \nTag your videos #videoshowapp","website":"http://videoshowapp.com","profile_picture":"http://images.ak.instagram.com/profiles/profile_789981918_75sq_1386833898.jpg","full_name":"","id":"789981918"}}}
+
+* like_media
+action: post    
+    curl 'http://api.videoshowapp.com:8087/api/v1/medium/690454531071358639_190726100/like_media' -F "access_token=789981918.80d957c.f408bb1006844250907d9d2a34df66c4"
+
+result:
+    
+    {"meta":{"code":200},"data":null}%   
+
+*unlike_media
+
+action: delete    
+     curl -X DELETE 'http://api.videoshowapp.com:8087/api/v1/medium/690454531071358639_190726100/unlike_media' -F "access_token=789981918.80d957c.f408bb1006844250907d9d2a34df66c4"
+
+result:
+    
+    {"meta":{"code":200},"data":null}%   

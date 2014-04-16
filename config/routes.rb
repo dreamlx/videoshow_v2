@@ -3,6 +3,7 @@ VideoshowV2::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   match "home" => 'home#index'
+  get '/home/callback' => 'home#callback'
   namespace :api do
     namespace :v1 do
       resources :clientlogs
