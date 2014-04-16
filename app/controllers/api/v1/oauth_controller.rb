@@ -1,5 +1,7 @@
 class Api::V1::OauthController < Api::BaseController
-  CALLBACK = "http://api.videoshowapp.com:8087/api/v1/oauth/callback"
+  #CALLBACK = "http://api.videoshowapp.com:8087/api/v1/oauth/callback"
+  CALLBACK = "http://54.178.154.11:8087/api/v1/oauth/callback"
+  
   #CALLBACK ='http://127.0.0.1:3000/api/v1/oauth/callback'
   def index
   end
