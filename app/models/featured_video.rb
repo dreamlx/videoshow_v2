@@ -20,6 +20,11 @@ class FeaturedVideo
     self.save
   end
 
+  def recommend!
+    self.order_no = 99
+    self.save
+  end
+
   def self.tag_recent_media(tag='videoshow',count=300)
     instagrams = self.new
     FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do

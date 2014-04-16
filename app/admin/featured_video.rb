@@ -39,7 +39,7 @@ ActiveAdmin.register FeaturedVideo do
 
   member_action :recommend, :method => :put do
     item = FeaturedVideo.find(params[:id])
-    item.gotop!
+    item.recommend!
     redirect_to  admin_featured_videos_path
   end
 

@@ -44,7 +44,7 @@ class Api::V1::MediumController < Api::BaseController
       render json: {code: 400, message: 'miss access_token '}
     else
       #todo
-      url = "https://api.instagram.com/v1/media/#{params[:id]}"
+      url = "https://api.instagram.com/v1/media/#{params[:id]}/likes"
       result2 = JSON.parse(Typhoeus.post(url, body: { access_token: params[:access_token] }).body)
       render json:  result2
     end
@@ -55,7 +55,7 @@ class Api::V1::MediumController < Api::BaseController
       render json: {code: 400, message: 'miss access_token '}
     else
       client = Instagram.client(:access_token => params[:access_token])
-      result  = client.unlike_media(params[:media_id])
+      result  = client.unlike_media(params[:id])
       render json: result.to_json
     end
   end
