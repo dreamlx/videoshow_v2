@@ -23,9 +23,9 @@ class Api::V1::MediumController < Api::BaseController
     if params[:access_token].blank? or params[:id].blank?
       render json:  {code: 400, message: 'miss access_token'}
     else
-      url = "https://api.instagram.com/v1/media/#{params[:id]}?access_token=#{params[:access_token]}"
-      result2 = JSON.parse(Typhoeus.get(url).body)
-      render json:  result2
+      client = Instagram.client(:access_token => params[:access_token])
+      result = client.media_item(params[:id])
+      render json:  result
     end
   end
 
@@ -33,8 +33,8 @@ class Api::V1::MediumController < Api::BaseController
     if params[:access_token].blank? or params[:id].blank?
       render json:  {code: 400, message: 'miss access_token '}
     else
-      url = "https://api.instagram.com/v1/media/#{params[:id]}/likes?access_token=#{params[:access_token]}"
-      result2 = JSON.parse(Typhoeus.get(url).body)
+      client = Instagram.client(:access_token => params[:access_token])
+      result2 = client.media_likes(params[:id])
       render json:  result2
     end
   end
@@ -43,10 +43,10 @@ class Api::V1::MediumController < Api::BaseController
     if params[:access_token].blank? or params[:id].blank?
       render json: {code: 400, message: 'miss access_token '}
     else
-      #todo
-      url = "https://api.instagram.com/v1/media/#{params[:id]}/likes"
-      result2 = JSON.parse(Typhoeus.post(url, body: { access_token: params[:access_token] }).body)
-      render json:  result2
+      client = Instagram.client(:access_token => params[:access_token])
+      result2 = client.like_media(params[:id])
+      result = client.media_item(params[:id])
+      render json:  {like_status: result2, media_item: result}
     end
   end
 
@@ -55,8 +55,9 @@ class Api::V1::MediumController < Api::BaseController
       render json: {code: 400, message: 'miss access_token '}
     else
       client = Instagram.client(:access_token => params[:access_token])
-      result  = client.unlike_media(params[:id])
-      render json: result.to_json
+      result2 = client.like_media(params[:id])
+      result = client.media_item(params[:id])
+      render json:  {like_status: result2, media_item: result}
     end
   end
 
