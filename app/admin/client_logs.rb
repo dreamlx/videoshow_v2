@@ -1,5 +1,7 @@
 ActiveAdmin.register ClientLog do
     index do
+      selectable_column
+      
       column :id 
       column :created_at
       column :logfile do |c|

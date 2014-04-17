@@ -3,6 +3,7 @@ ActiveAdmin.register FeaturedVideo do
   actions :all, except: [:edit, :new] 
 
   index do
+    selectable_column
     column :order_no
     column  :username do |item|
       item.instagram_item["user"]["username"]
