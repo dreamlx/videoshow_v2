@@ -65,10 +65,8 @@ class FeaturedVideo
       if request.code == 0
         item.delete
       else
-        if Typhoeus.get(item.instagram_item['user']['profile_picture']).code == 0
-          item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
-          item.save
-        end
+        item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
+        item.save
       end
     end
   end
