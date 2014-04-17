@@ -29,9 +29,9 @@ ActiveAdmin.register FeaturedVideo do
 
     column :recommend do |item|
       if item.order_no > 0
-        button_to('uncommend', uncommend_admin_featured_video_path(item), :method => :put) 
+        link_to('Cancel', uncommend_admin_featured_video_path(item), :method => :put,:class => 'button') 
       else
-        button_to('Recommend', recommend_admin_featured_video_path(item), :method => :put)
+        link_to('Recommend', recommend_admin_featured_video_path(item), :method => :put,:class => 'button')
       end
     end
     default_actions
@@ -48,12 +48,4 @@ ActiveAdmin.register FeaturedVideo do
     item.uncommend!
     redirect_to  admin_featured_videos_path
   end  
-
-  action_item :only => :show  do
-    link_to('Recommend', recommend_admin_featured_video_path(featured_video), :method => :put)
-  end
-
-  action_item :only => :show  do
-    link_to('uncommend', uncommend_admin_featured_video_path(featured_video), :method => :put)
-  end
 end

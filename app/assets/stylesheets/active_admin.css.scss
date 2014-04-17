@@ -27,7 +27,10 @@
 // .active_admin       applies to any Active Admin namespace
 // .admin_namespace    applies to the admin namespace (eg: /admin)
 // .other_namespace    applies to a custom namespace named other (eg: /other)
-a:visited
-{
-  background-color:yellow;
-} 
+body.active_admin {
+  a:link    {color: blue;}
+  a:visited {color: red;}
+  a:hover   {color: red;}
+  a:active  {color: yellow;}
+}
+
