@@ -1,25 +1,24 @@
 ActiveAdmin.register FeaturedVideo do
   config.filters =false
-  actions :all, except: [:edit, :new] 
+
+  actions :all, except: [:edit, :new]
 
   index do
     selectable_column
-    column :order_no
+
     column  :username do |item|
-      item.instagram_item["user"]["username"]
+      link_to item.instagram_item["user"]["username"], item.instagram_item["link"]
     end
     column :image do |item|
       image_tag item.instagram_item["images"]["thumbnail"]["url"],:size => '128x128'
-    end
+     end
+
     column :video do |item|
       video_tag item.instagram_item["videos"]["low_resolution"]["url"],
         :controls => true,
         :autobuffer => true,
         :poster => item.instagram_item["images"]["low_resolution"]["url"],
         :size => '200x200'
-    end
-    column :link do |item|
-      item.instagram_item["link"]
     end
     column :tags do |item|
       item.instagram_item["tags"]
@@ -48,5 +47,5 @@ ActiveAdmin.register FeaturedVideo do
     item = FeaturedVideo.find(params[:id])
     item.uncommend!
     redirect_to  admin_featured_videos_path
-  end  
+  end
 end

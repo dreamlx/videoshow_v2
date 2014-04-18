@@ -6,7 +6,11 @@ class ClientLog
   attr_accessible :client_log, :client_log_cache
   default_scope desc(:"created_at")
 
-    def check!
+  scope :from_to, ->(start_date, end_date) {
+          where(created_at:  {'$gt' => start_date, '$lt' => end_date})
+        }
+
+  def check!
     self.check_status = true
     self.save
   end
