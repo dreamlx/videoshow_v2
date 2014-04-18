@@ -1,8 +1,8 @@
 .fieldset
   = form_tag admin_client_logs_path, method: 'get' do
     %p
-      %input{ type: 'datetime', name: 'start_date', value: params[:start_date]}
-      %input{ type: 'datetime', name: 'end_date', value: params[:end_date]}
+      %input{ type: 'date', name: 'start_date', value: params[:start_date]}
+      %input{ type: 'date', name: 'end_date', value: params[:end_date]}
     %hr
     %p
       = submit_tag 'submit'

@@ -25,7 +25,7 @@ ActiveAdmin.register ClientLog do
 
   controller do
     def index
-      if params[:start_date].blank? and params[:end_date].blank?
+      if params[:start_date].blank? or params[:end_date].blank?
         @client_logs= ClientLog.all.page(params[:page]).per(10)
       else
         @client_logs= ClientLog.from_to(params[:start_date], params[:end_date]).page(params[:page]).per(10)
