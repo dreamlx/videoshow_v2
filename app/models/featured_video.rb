@@ -25,20 +25,23 @@ class FeaturedVideo
     self.save
   end
 
-  def self.tag_recent_media(tag='videoshow',count=300)
+  def self.tag_recent_media(tag='videoshow',count=100)
     instagrams = self.new
     FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do
       timeout(15) do
         instagram_collection = Instagram.tag_recent_media(tag, { count: count })
-        instagram_collection.each do |item|
-          if item.type == 'video'
-            if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
-              self.create!(instagram_item: item)
-            end
+        instagram_collection.reject { |i| i.type == 'video' }.each do |item|
+          if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
+            self.create!(instagram_item: item)
+          else
+            udpate_item = FeaturedVideo.where(:'instagram_item.id' => item.id).first 
+            udpate_item.instagram_item = item
+            update_item.save
           end
         end
       end
     end
+
     return instagrams
   end
 
@@ -60,14 +63,16 @@ class FeaturedVideo
   end
 
   def self.clear_bad_item
-    self.all.limit(300).each do |item|
+    self.limit(500).each do |item|
       request = Typhoeus.get(item.instagram_item['images']['thumbnail']['url'])
-      if request.code == 0
-        item.delete
-      else
-        item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
-        item.save
-      end
+      item.delete if request.code == 0
+    end
+  end
+
+  def self.update_all(skipnum = 30, limitnum=100)
+    self.limit(limitnum).skip(skipnum)each do |item|
+      item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
+      item.save
     end
   end
 end
