@@ -70,7 +70,7 @@ class FeaturedVideo
   end
 
   def self.update_all(skipnum = 30, limitnum=100)
-    self.limit(limitnum).skip(skipnum)each do |item|
+    self.limit(limitnum).skip(skipnum).each do |item|
       item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
       item.save
     end

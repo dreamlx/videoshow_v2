@@ -1,8 +1,17 @@
 .fieldset
   = form_tag admin_client_logs_path, method: 'get' do
     %p
+      %label from:
       %input{ type: 'date', name: 'start_date', value: params[:start_date]}
+      %label to:
       %input{ type: 'date', name: 'end_date', value: params[:end_date]}
+      %hr
+      %label app_version:
+      %input{ type: 'text', name: 'app_version', value: params[:app_version]}
+      %label os_version:
+      %input{ type: 'text', name: 'os_version', value: params[:os_version]}
+      %label phone_model:
+      %input{ type: 'text', name: 'phone_model', value: params[:phone_model]}
     %hr
     %p
       = submit_tag 'submit'

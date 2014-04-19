@@ -2,6 +2,9 @@ class ClientLog
   include Mongoid::Document
   include Mongoid::Timestamps
   field :check_status, type: Boolean
+  field :os_version, type: String
+  field :phone_model, type: String
+  field :app_version, type: String
   mount_uploader :client_log, ClientLogUploader
   attr_accessible :client_log, :client_log_cache
   default_scope desc(:"created_at")

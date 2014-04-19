@@ -9,6 +9,9 @@ ActiveAdmin.register ClientLog do
     selectable_column
     
     column :id 
+    column :os_version
+    column :app_version
+    column :phone_model
     column :created_at
     column :logfile do |c|
       link_to c.client_log, c.client_log.url
@@ -20,16 +23,23 @@ ActiveAdmin.register ClientLog do
         link_to('check', check_admin_client_log_path(item), :method => :put,:class => 'button')
       end
     end
-    default_actions
+    default_actions 
   end
 
   controller do
     def index
+      items = ClientLog.all
       if params[:start_date].blank? or params[:end_date].blank?
-        @client_logs= ClientLog.all.page(params[:page]).per(10)
+        # skip
       else
-        @client_logs= ClientLog.from_to(params[:start_date], params[:end_date]).page(params[:page]).per(10)
+        items= items.from_to(params[:start_date], params[:end_date])
       end
+
+      items = items.where(phone_model: params[:phone_model]) unless params[:phone_model].blank?
+      items = items.where(app_version: params[:app_version]) unless params[:app_version].blank?
+      items = items.where(os_version: params[:os_version]) unless params[:os_version].blank?
+
+      @client_logs = items.page(params[:page]).per(10)
     end
   end
   member_action :cancel, :method => :put do
