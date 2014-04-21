@@ -4,9 +4,9 @@
 # server in each group is considered to be the first
 # unless any hosts have the primary property set.
 # Don't declare `role :all`, it's a meta role
-role :app, %w{iktas.me}
-role :web, %w{iktas.me}
-role :db,  %w{iktas.me}
+role :app, %w{api.videoshowapp.com}
+role :web, %w{api.videoshowapp.com}
+role :db,  %w{api.videoshowapp.com}
 
 # Extended Server Syntax
 # ======================
@@ -14,7 +14,11 @@ role :db,  %w{iktas.me}
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'iktas.me', user: 'root', roles: %w{web app}, my_property: :my_value
+server 'api.videoshowapp.com', user: 'root', roles: %w{web app db}, my_property: :my_value
+
+# Ensure that bundle is used for rake tasks
+SSHKit.config.command_map[:rake] = "bundle exec rake"
+
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
