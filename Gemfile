@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'rake'
+#gem 'rake'
 gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
 gem 'activeadmin-mongoid'
 gem 'rails', '3.2.13'

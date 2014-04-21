@@ -14,11 +14,17 @@ role :db,  %w{api.videoshowapp.com}
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server 'api.videoshowapp.com', user: 'root', roles: %w{web app db}, my_property: :my_value
+server 'api.videoshowapp.com', user: 'ubuntu', roles: %w{web app db}, my_property: :my_value
 
 # Ensure that bundle is used for rake tasks
-SSHKit.config.command_map[:rake] = "bundle exec rake"
+#SSHKit.config.command_map[:rake] = "bundle exec rake"
 
+
+set :ssh_options, {
+  user: "ubuntu",
+  keys: %w(/Users/dreamlinx/NetBeansProjects/videoshow_v2/doc/energysh.pem),
+  forward_agent: true
+}
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options

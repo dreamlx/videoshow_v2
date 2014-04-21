@@ -4,12 +4,12 @@ lock '3.1.0'
 set :application, 'videoshow'
 
 set :rvm_type, :system                     # Defaults to: :auto
-set :rvm_ruby_version, 'ruby-2.0.0-p353@videoshow'      # Defaults to: 'default'
+set :rvm_ruby_version, 'ruby-2.0.0@videoshow'      # Defaults to: 'default'
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/var/www/videoshow_v2'
+set :deploy_to, '/home/ubuntu/www/videoshow_production'
 
 # Default value for :scm is :git
 set :scm, :git
@@ -26,7 +26,7 @@ set :repo_url, 'git@github.com:dreamlx/videoshow_v2.git'
 
 # Default value for :linked_files is []
 #set :linked_files, %w{config/database.yml config/application.yml}
-set :linked_files, %w{config/schedule.rb config/mongoid.yml }
+#set :linked_files, %w{config/schedule.rb config/mongoid.yml }
 # Default value for linked_dirs is []
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 

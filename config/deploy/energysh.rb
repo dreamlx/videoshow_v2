@@ -14,7 +14,7 @@ role :db,  %w{192.168.1.64}
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server '192.168.1.64', user: 'root', roles: %w{web app}, my_property: :my_value
+server '192.168.1.64', user: 'ubuntu', roles: %w{web app}, my_property: :my_value
 
 #set :rvm_ruby_version, '2.0.0'      # Defaults to: 'default'
 
