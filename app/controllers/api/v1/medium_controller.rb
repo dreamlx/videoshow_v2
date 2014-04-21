@@ -7,7 +7,20 @@ class Api::V1::MediumController < Api::BaseController
         blacklist = []
     BlackList.all.each {|b| blacklist << b.username}
     instagrams = FeaturedVideo.filter_blacklist(blacklist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
-    render json: instagrams.to_json, :callback => params[:callback]
+    format_ins = []
+    instagrams.each do |i|
+      item = i.instagram_item
+      item.delete 'attribution'
+      item.delete 'tags'
+      item.delete 'location'
+      item.delete 'comments'
+      item['likes'].delete 'data'
+      item.delete 'caption'
+
+      format_ins << item
+    end
+    
+    render json: format_ins.to_json, :callback => params[:callback]
   end
 
   def recent #tag_recent_media
@@ -16,7 +29,20 @@ class Api::V1::MediumController < Api::BaseController
         blacklist = []
     BlackList.all.each {|b| blacklist << b.username}
     instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
-    render json: instagrams.to_json, :callback => params[:callback]
+        format_ins = []
+    instagrams.each do |i|
+      item = i.instagram_item
+      item.delete 'attribution'
+      item.delete 'tags'
+      item.delete 'location'
+      item.delete 'comments'
+      item['likes'].delete 'data'
+      item.delete 'caption'
+
+      format_ins << item
+    end
+    
+    render json: format_ins.to_json, :callback => params[:callback]
   end
 
   def show
