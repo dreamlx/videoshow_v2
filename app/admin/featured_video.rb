@@ -17,7 +17,7 @@ ActiveAdmin.register FeaturedVideo do
       video_tag item.instagram_item["videos"]["low_resolution"]["url"],
         :controls => true,
         :autobuffer => true,
-        :poster => item.instagram_item["images"]["low_resolution"]["url"],
+        :poster => item.instagram_item["images"]["thumbnail"]["url"],
         :size => '200x200'
     end
     column :tags do |item|
