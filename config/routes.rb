@@ -1,9 +1,10 @@
 VideoshowV2::Application.routes.draw do
-  devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
 
+  root :to => 'home#index'
   match "home" => 'home#index'
   get '/home/callback' => 'home#callback'
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   namespace :api do
     namespace :v1 do
       resources :clientlogs
@@ -85,7 +86,7 @@ VideoshowV2::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+
 
   # See how all your routes lay out with "rake routes"
 

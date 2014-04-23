@@ -32,6 +32,8 @@ gem 'pry-rails'
 
 gem 'devise'
 gem 'figaro'
+gem 'sass-rails', '>= 3.2'
+gem 'bootstrap-sass', '~> 3.1.1'
 
 
 # Gems used only for assets and not required

@@ -11,6 +11,17 @@ class FeaturedVideo
   scope :instagram_asc, asc(:"instagram_item.created_time")
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
 
+  def format_me
+      item = self.instagram_item
+      item.delete 'attribution'
+      item.delete 'tags'
+      item.delete 'location'
+      item.delete 'comments'
+      item['likes'].delete 'data'
+      item.delete 'caption'
+
+      return item
+  end
   def self.filter_blacklist(blacklist)
     where(:"instagram_item.user.username".nin => blacklist)
   end
