@@ -20,8 +20,8 @@ ActiveAdmin.register FeaturedVideo do
         :poster => item.instagram_item["images"]["thumbnail"]["url"],
         :size => '200x200'
     end
-    column :tags do |item|
-      item.instagram_item["tags"]
+    column :link do |item|
+      item.instagram_item["link"]
     end
     column :created_time do |item|
       Date.strptime(item.instagram_item["created_time"],"%s")
