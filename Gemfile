@@ -13,7 +13,7 @@ gem 'jquery-ui-rails'
 gem 'unicorn'
 gem 'rabl'
 gem 'oj'
-
+gem 'puma'
 gem "typhoeus"
 gem 'capistrano', '~> 3.1'
 gem 'capistrano-rails', '~> 1.1'

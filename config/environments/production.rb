@@ -46,8 +46,14 @@ VideoshowV2::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( active_admin.css.scss active_admin.js jquery-ui.js video-js.swf vjs.eot vjs.svg vjs.ttf vjs.woff)
-
+  config.assets.precompile += %w( user.css jquery-ui.js video-js.swf vjs.eot vjs.svg vjs.ttf vjs.woff)
+# Include all JS files, also those in subdolfer or javascripts assets folder
+ # includes for exmaple applicant.js. JS isn't the problem so the catch all works.
+ config.assets.precompile += %w(*.js)
+ # Replace %w( *.css *.js *.css.scss) with complex regexp avoiding SCSS partials compilation
+ config.assets.precompile += [/^[^_]\w+\.(css|css.scss)$/]
+ #Adding active_admin JS and CSS to the precompilation list
+ config.assets.precompile += %w( active_admin.css active_admin.js active_admin/print.css )
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 

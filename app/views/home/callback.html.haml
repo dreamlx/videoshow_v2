@@ -1,7 +1,8 @@
 :javascript
   $(document).ready(function() {
-    login_interface.info(#{session[:access_token]});
+    t_token = $('#token').val();
+    login_interface.info(t_token);
   });
 
 %h3
-  = session[:access_token]
+  %input#token{type: 'hidden', value: session[:access_token]}

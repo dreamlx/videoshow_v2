@@ -7,8 +7,7 @@ ActiveAdmin.register ClientLog do
 
   index do
     selectable_column
-    
-    column :id 
+
     column :os_version
     column :app_version
     column :phone_model
@@ -23,7 +22,6 @@ ActiveAdmin.register ClientLog do
         link_to('check', check_admin_client_log_path(item), :method => :put,:class => 'button')
       end
     end
-    default_actions 
   end
 
   controller do
