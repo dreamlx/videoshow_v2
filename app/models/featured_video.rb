@@ -45,9 +45,9 @@ class FeaturedVideo
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
             self.create!(instagram_item: item)
           else
-            udpate_item = FeaturedVideo.where(:'instagram_item.id' => item.id).first 
-            udpate_item.instagram_item = item
-            update_item.save
+            is_item = FeaturedVideo.where(:'instagram_item.id' => item.id).first 
+            is_item.instagram_item = item
+            is_item.save
           end
         end
       end
