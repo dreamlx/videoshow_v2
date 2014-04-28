@@ -37,7 +37,7 @@ ActiveAdmin.register ClientLog do
       items = items.where(app_version: params[:app_version]) unless params[:app_version].blank?
       items = items.where(os_version: params[:os_version]) unless params[:os_version].blank?
 
-      @client_logs = items.page(params[:page]).per(20)
+      @client_logs = items.page(params[:page]).per(params[:per_page]||20)
     end
   end
   member_action :cancel, :method => :put do
