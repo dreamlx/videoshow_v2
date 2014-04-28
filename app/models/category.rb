@@ -5,7 +5,7 @@ class Category
 
   def self.get_all_tags
     Category.all.each do |c|
-      FeaturedVideo.tag_recent_media(c.related_tag)
+      FeaturedVideo.recent(c.related_tag)
     end
   end
 end

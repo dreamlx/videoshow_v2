@@ -36,11 +36,11 @@ class FeaturedVideo
     self.save
   end
 
-  def self.tag_recent_media(tag='videoshow',count=100)
+  def self.recent(tag='videoshow',count=100)
     instagrams = self.new
     FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do
       timeout(15) do
-        instagram_collection = Instagram.tag_recent_media(tag, { count: count })
+        instagram_collection = Instagram.recent(tag, { count: count })
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
             self.create!(instagram_item: item)
