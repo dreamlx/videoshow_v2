@@ -13,6 +13,6 @@ class Api::V1::ClientlogsController < Api::BaseController
   end
 
   def index
-    render json: 'test'
+    render json: ClientLog.limit(20000).to_json
   end
 end
