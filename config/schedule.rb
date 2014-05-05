@@ -21,24 +21,16 @@
 
 set :environment, "development"
 
-every 1.minutes do
+every 3.minutes do
   # 自动从远端获取有tag的instagram media
   runner "Category.get_all_tags"
 end
 
-every 5.minutes do
+every 7.minutes do
   runner "FeaturedVideo.clear_bad_item"
 end
 
-every 5.minutes do
-  #skip, limit
-  runner "FeaturedVideo.update_all(30,50)"
-end
-
 every 10.minutes do
-  runner "FeaturedVideo.update_all(100,100)"
-end
-
-every 1.hours do
-  runner "FeaturedVideo.update_all(100,300)"
+  #skip, limit
+  runner "FeaturedVideo.update_all(30,100)"
 end

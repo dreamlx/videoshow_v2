@@ -15,6 +15,7 @@ ActiveAdmin.register ClientLog do
     column :logfile do |c|
       link_to c.client_log, c.client_log.url
     end
+
     column :check_status do |item|
       if item.check_status
         link_to('cancel', cancel_admin_client_log_path(item), :method => :put,:class => 'button') 
