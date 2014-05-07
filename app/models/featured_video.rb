@@ -22,7 +22,9 @@ class FeaturedVideo
 
       return item
   end
-  def self.filter_blacklist(blacklist)
+  def self.filter_blacklist
+    blacklist = []
+    BlackList.all.each {|b| blacklist << b.username}
     where(:"instagram_item.user.username".nin => blacklist)
   end
 
@@ -73,11 +75,25 @@ class FeaturedVideo
     end
   end
 
-  def self.clear_bad_item
-    self.limit(500).each do |item|
-      request = Typhoeus.get(item.instagram_item['images']['thumbnail']['url'])
-      item.delete if request.code == 0
-    end
+  def check_me
+      request3 = Typhoeus.get("https://api.instagram.com/v1/media/#{self.instagram_item['id']}")
+      
+      if request3.code == 400
+        self.delete
+        
+        return false
+      else
+        request = Typhoeus.get(self.instagram_item['images']['thumbnail']['url'])
+        request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
+        self.update_item if request.code == 0 or request2.code == 0
+
+        return true
+      end
+  end
+
+  def update_item
+      self.instagram_item  = Instagram.media_item(self.instagram_item["id"])
+      self.save
   end
 
   def self.update_all(skipnum = 30, limitnum=100)

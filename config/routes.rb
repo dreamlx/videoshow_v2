@@ -17,6 +17,7 @@ VideoshowV2::Application.routes.draw do
           get 'featured'
           get 'recent'
           get 'tag_search'
+          get 'user_liked_media'
         end
 
         member do
