@@ -9,10 +9,10 @@ class Api::V1::MediumController < Api::BaseController
     
     format_ins = []
     instagrams.each do |item|
-      if item.check_me
+      #if item.check_me
         item = item.format_me
         format_ins << item 
-      end
+      #end
     end
 
     render json: format_ins.to_json, :callback => params[:callback]
@@ -26,10 +26,10 @@ class Api::V1::MediumController < Api::BaseController
     
     format_ins = []
     instagrams.each do |item|
-      if item.check_me
+      #if item.check_me
         item = item.format_me
         format_ins << item 
-      end
+      #end
     end
 
     render json: format_ins.to_json, :callback => params[:callback]
