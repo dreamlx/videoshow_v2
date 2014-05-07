@@ -1,0 +1,42 @@
+=> [31m[1;31m#<[0m[31mMongoid::Contextual::Mongo:0x00000004a53b98
+ @cache=nil,
+ @cache_loaded=true,
+ @collection=
+  #<Moped::Collection:0x00000004a535f8
+   @database=
+    #<Moped::Database:0x00000004a53670
+     @name="videoshow_v2_development",
+     @session=
+      <Moped::Session seeds=["localhost:27017"] database=videoshow_v2_development>>,
+   @name="categories">,
+ @criteria=
+  #<Mongoid::Criteria
+  selector: {}
+  options:  {}
+  class:    Category
+  embedded: false>
+,
+ @klass=Category,
+ @query=
+  #<Moped::Query:0x00000004a53558
+   @collection=
+    #<Moped::Collection:0x00000004a535f8
+     @database=
+      #<Moped::Database:0x00000004a53670
+       @name="videoshow_v2_development",
+       @session=
+        <Moped::Session seeds=["localhost:27017"] database=videoshow_v2_development>>,
+     @name="categories">,
+   @operation=
+    #<Moped::Protocol::Query
+  @length=0
+  @request_id=0
+  @response_to=0
+  @op_code=2004
+  @flags=[]
+  @full_collection_name="videoshow_v2_development.categories"
+  @skip=0
+  @limit=0
+  @selector={}
+  @fields=nil>,
+   @selector={}>[1;31m>[0m[31m[0m[0m

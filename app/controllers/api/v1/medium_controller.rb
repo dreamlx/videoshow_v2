@@ -1,16 +1,18 @@
+#coding: utf-8
+
 require 'timeout'
 
 class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
     page = params[:page]
     page = 15 if page.to_i > 15
-        blacklist = []
+    blacklist = []
     BlackList.all.each {|b| blacklist << b.username}
     instagrams = FeaturedVideo.filter_blacklist(blacklist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
     format_ins = []
+    
     instagrams.each do |i|
       item = i.format_me
-
       format_ins << item
     end
     

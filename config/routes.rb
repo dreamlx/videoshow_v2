@@ -7,20 +7,30 @@ VideoshowV2::Application.routes.draw do
   ActiveAdmin.routes(self)
   namespace :api do
     namespace :v1 do
+      # create/update/delete/read clientlog
       resources :clientlogs
+      
+      # connect to instagram and get callback token
       get '/oauth/connect' => 'oauth#connect'
       get '/oauth/callback' => 'oauth#callback'
+
+      # show users info
       get '/users/feed' => 'users#feed'
 
       resources :medium do
         collection do
+          # recommend collection
           get 'featured'
+          # last collection
           get 'recent'
+
           get 'tag_search'
         end
 
         member do
+          # get media.likes
           get 'likes'
+
           post 'like_media'
           delete 'unlike_media'
         end
