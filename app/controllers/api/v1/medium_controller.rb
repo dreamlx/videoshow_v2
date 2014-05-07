@@ -8,11 +8,11 @@ class Api::V1::MediumController < Api::BaseController
     instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
     
     format_ins = []
-    instagrams.each do |item|
-      #if item.check_me
-        item = item.format_me
+    instagrams.each do |i|
+      if i.check_me
+        item = i.format_me
         format_ins << item 
-      #end
+      end
     end
 
     render json: format_ins.to_json, :callback => params[:callback]
@@ -25,11 +25,11 @@ class Api::V1::MediumController < Api::BaseController
     instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
     
     format_ins = []
-    instagrams.each do |item|
-      #if item.check_me
-        item = item.format_me
+    instagrams.each do |i|
+      if i.check_me
+        item = i.format_me
         format_ins << item 
-      #end
+      end
     end
 
     render json: format_ins.to_json, :callback => params[:callback]
