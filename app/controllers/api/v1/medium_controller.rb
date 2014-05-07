@@ -4,12 +4,13 @@ class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
     page = params[:page]
     page = 15 if page.to_i > 15
-    instagrams = FeaturedVideo.filter_blacklist.featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    blist = BlackList.all.map{|b| b.username}
+    instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
     
     format_ins = []
-    instagrams.each do |i|
+    instagrams.each do |item|
       if item.check_me
-        item = i.format_me
+        item = item.format_me
         format_ins << item 
       end
     end
@@ -20,12 +21,13 @@ class Api::V1::MediumController < Api::BaseController
   def recent #tag_recent_media
     page = params[:page]
     page = 15 if page.to_i > 15
-    instagrams = FeaturedVideo.filter_blacklist.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    blist = BlackList.all.map{|b| b.username}
+    instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
     
     format_ins = []
-    instagrams.each do |i|
+    instagrams.each do |item|
       if item.check_me
-        item = i.format_me
+        item = item.format_me
         format_ins << item 
       end
     end

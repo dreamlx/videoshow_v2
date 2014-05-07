@@ -23,8 +23,9 @@ class FeaturedVideo
 
       return item
   end
-  def self.filter_blacklist
-    where(:"instagram_item.user.username".nin => BlackList.all.map{|b| b.username})
+
+  def self.filter_blacklist(blist)
+    where(:"instagram_item.user.username".nin => blist)
   end
 
   def uncommend!
@@ -95,6 +96,8 @@ class FeaturedVideo
           self.update_item if request.code == 0 or request2.code == 0
           return true
         end        
+      else
+        return true
       end
 
   end
