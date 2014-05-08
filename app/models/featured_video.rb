@@ -86,7 +86,7 @@ class FeaturedVideo
         self.update_date = DateTime.now
         self.save
 
-        request3 = Typhoeus.get("https://api.instagram.com/v1/media/#{self.instagram_item['id']}")
+        request3 = Typhoeus.get("https://api.instagram.com/v1/media/#{self.instagram_item['id']}?client_id=80d957c56456440fa205a651372bbcb3")
         
         if request3.code == 400
           self.delete

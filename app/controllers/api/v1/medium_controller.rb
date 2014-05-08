@@ -3,7 +3,6 @@ require 'timeout'
 class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
     page = params[:page]
-    page = 15 if page.to_i > 15
     blist = BlackList.all.map{|b| b.username}
     instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
     
@@ -11,7 +10,7 @@ class Api::V1::MediumController < Api::BaseController
     instagrams.each do |i|
       if i.check_me
         item = i.format_me
-        format_ins << item 
+        format_ins << item
       end
     end
 
@@ -20,7 +19,6 @@ class Api::V1::MediumController < Api::BaseController
 
   def recent #tag_recent_media
     page = params[:page]
-    page = 15 if page.to_i > 15
     blist = BlackList.all.map{|b| b.username}
     instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
     
@@ -28,7 +26,7 @@ class Api::V1::MediumController < Api::BaseController
     instagrams.each do |i|
       if i.check_me
         item = i.format_me
-        format_ins << item 
+        format_ins << item
       end
     end
 
