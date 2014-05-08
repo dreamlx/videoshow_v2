@@ -38,7 +38,7 @@ class FeaturedVideo
     self.save
   end
 
-  def self.recent(tag='videoshow'，min_id='', max_id='')
+  def self.recent(tag='videoshow')
     #todo: min:before, max:after
     instagrams = self.new
     FeaturedVideo.retryable(:tries => 3, :on => Timeout::Error) do
