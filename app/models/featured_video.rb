@@ -77,6 +77,8 @@ class FeaturedVideo
   end
 
   def check_me
+      flag = true
+
       if self.update_date.nil?
         self.update_date = DateTime.now
         self.save
@@ -87,24 +89,34 @@ class FeaturedVideo
         self.save
 
         request3 = Typhoeus.get("https://api.instagram.com/v1/media/#{self.instagram_item['id']}?client_id=80d957c56456440fa205a651372bbcb3")
-        
-        if request3.code == 400
+        if request3.code == 400 or request3.code ==0
           self.delete
-          return false
-        else
-          request = Typhoeus.get(self.instagram_item['images']['thumbnail']['url'])
-          if request.code == 400
-            self.delete
-            return false
+          flag = false 
+        elsif
+          request4 = Typhoeus.get(self.instagram_item['images']['low_resolution']['url'])
+          if request4.code == 400 or request4 == 0
+            self.delete 
+            flag = false
+          elsif
+            request = Typhoeus.get(self.instagram_item['videos']['low_resolution']['url'])
+            if request.code == 400 or request == 0
+              self.delete
+              flag = false
+            end
           end
-          request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
-          self.update_item if request2.code == 0
-          return true
         end
+
+        request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
+        if request2.code == 0
+          self.update_item 
+          flag = true
+        end
+
       else
-        return true
+        flag = true
       end
 
+      return flag
   end
 
   def update_item
