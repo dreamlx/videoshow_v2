@@ -41,15 +41,17 @@ class FeaturedVideo
   def self.recent(tag='videoshow')
     #todo: min:before, max:after
     instagrams = self.new
+
     FeaturedVideo.retryable(:tries => 3, :on => Timeout::Error) do
       timeout(7) do
         instagram_collection = Instagram.tag_recent_media(tag)
+
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
             self.create!(instagram_item: item, update_date: Time.now)
           else
-            items = FeaturedVideo.where(:'instagram_item.id' => item.id).each do |item|
-              item.check_me
+            FeaturedVideo.where(:'instagram_item.id' => item.id).each do |item2|
+              item2.check_me
             end
           end
         end
@@ -91,11 +93,11 @@ class FeaturedVideo
         request3 = Typhoeus.get("https://api.instagram.com/v1/media/#{self.instagram_item['id']}?client_id=80d957c56456440fa205a651372bbcb3")
         if request3.code == 400 or request3.code ==0
           self.delete
-          flag = false 
+          flag = false
         elsif
           request4 = Typhoeus.get(self.instagram_item['images']['low_resolution']['url'])
           if request4.code == 400 or request4 == 0
-            self.delete 
+            self.delete
             flag = false
           elsif
             request = Typhoeus.get(self.instagram_item['videos']['low_resolution']['url'])
@@ -108,7 +110,7 @@ class FeaturedVideo
 
         request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
         if request2.code == 0
-          self.update_item 
+          self.update_item
           flag = true
         end
 
