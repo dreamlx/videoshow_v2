@@ -49,7 +49,7 @@ class FeaturedVideo
             self.create!(instagram_item: item, update_date: Time.now)
           else
             items = FeaturedVideo.where(:'instagram_item.id' => item.id).each do |item|
-
+              item.check_me
             end
           end
         end
@@ -93,10 +93,14 @@ class FeaturedVideo
           return false
         else
           request = Typhoeus.get(self.instagram_item['images']['thumbnail']['url'])
+          if request.code == 400
+            self.delete
+            return false
+          end
           request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
-          self.update_item if request.code == 0 or request2.code == 0
+          self.update_item if request2.code == 0
           return true
-        end        
+        end
       else
         return true
       end
