@@ -34,7 +34,7 @@ class FeaturedVideo
   end
 
   def recommend!
-    self.order_no = sel.order_no + 1
+    self.order_no = self.order_no + 1
     self.save
   end
 
