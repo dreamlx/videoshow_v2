@@ -50,9 +50,9 @@ class FeaturedVideo
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
             self.create!(instagram_item: item, update_date: Time.now)
           else
-            FeaturedVideo.where(:'instagram_item.id' => item.id).each do |item2|
-              item2.check_me
-            end
+            item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
+            item2.instagram_item = item
+            item2.save
           end
         end
       end
@@ -86,7 +86,7 @@ class FeaturedVideo
         self.save
       end
       
-      if self.update_date > 5.minutes.ago
+      if self.update_date > 7.minutes.ago
         self.update_date = DateTime.now
         self.save
 
