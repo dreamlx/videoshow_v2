@@ -3,5 +3,6 @@ class HomeController < ApplicationController
   end
 
   def callback
+    
   end
 end

@@ -6,30 +6,35 @@ class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
     page = params[:page]
     page = 15 if page.to_i > 15
-    blacklist = []
-    BlackList.all.each {|b| blacklist << b.username}
-    instagrams = FeaturedVideo.filter_blacklist(blacklist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+
+    blist = BlackList.all.map{|b| b.username}
+    instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    
     format_ins = []
     
     instagrams.each do |i|
-      item = i.format_me
-      format_ins << item
+
+      if i.check_me
+        item = i.format_me
+        format_ins << item 
+      end
     end
-    
+
     render json: format_ins.to_json, :callback => params[:callback]
   end
 
   def recent #tag_recent_media
     page = params[:page]
     page = 15 if page.to_i > 15
-        blacklist = []
-    BlackList.all.each {|b| blacklist << b.username}
-    instagrams = FeaturedVideo.filter_blacklist(blacklist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
-        format_ins = []
+    blist = BlackList.all.map{|b| b.username}
+    instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    
+    format_ins = []
     instagrams.each do |i|
-      item = i.format_me
-
-      format_ins << item
+      if i.check_me
+        item = i.format_me
+        format_ins << item 
+      end
     end
 
     render json: format_ins.to_json, :callback => params[:callback]
@@ -43,6 +48,13 @@ class Api::V1::MediumController < Api::BaseController
       result = client.media_item(params[:id])
       render json:  result
     end
+  end
+
+  def user_liked_media
+    client = Instagram.client(:access_token => session[:access_token])
+    user = client.user
+    result2 = client.user_liked_media(count: 50)
+    render json: result2
   end
 
   def likes
@@ -61,8 +73,10 @@ class Api::V1::MediumController < Api::BaseController
     else
       client = Instagram.client(:access_token => params[:access_token])
       result2 = client.like_media(params[:id])
-      result = client.media_item(params[:id])
-      render json:  {like_status: result2, media_item: result}
+      item = FeaturedVideo.where(:'instagram_item.id' => params[:id]).first
+      
+      item.update_item
+      render json:  {like_status: result2, media_item: item}
     end
   end
 
@@ -71,9 +85,11 @@ class Api::V1::MediumController < Api::BaseController
       render json: {code: 400, message: 'miss access_token '}
     else
       client = Instagram.client(:access_token => params[:access_token])
-      result2 = client.like_media(params[:id])
-      result = client.media_item(params[:id])
-      render json:  {like_status: result2, media_item: result}
+      result2 = client.unlike_media(params[:id])
+      item = FeaturedVideo.where(:'instagram_item.id' => params[:id]).first
+    
+      item.update_item
+      render json:  {like_status: result2, media_item: item}
     end
   end
 
