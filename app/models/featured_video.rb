@@ -34,22 +34,23 @@ class FeaturedVideo
   end
 
   def recommend!
-    self.order_no = 99
+    self.order_no = sel.order_no + 1
     self.save
   end
 
-  def self.recent(tag='videoshow',count=100)
+  def self.recent(tag='videoshow'，min_id='', max_id='')
+    #todo: min:before, max:after
     instagrams = self.new
-    FeaturedVideo.retryable(:tries => 10, :on => Timeout::Error) do
-      timeout(15) do
-        instagram_collection = Instagram.tag_recent_media(tag, { count: count })
+    FeaturedVideo.retryable(:tries => 3, :on => Timeout::Error) do
+      timeout(7) do
+        instagram_collection = Instagram.tag_recent_media(tag)
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
             self.create!(instagram_item: item, update_date: Time.now)
           else
-            is_item = FeaturedVideo.where(:'instagram_item.id' => item.id).first 
-            is_item.instagram_item = item
-            is_item.save
+            items = FeaturedVideo.where(:'instagram_item.id' => item.id).each do |item|
+
+            end
           end
         end
       end
