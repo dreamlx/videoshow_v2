@@ -80,21 +80,21 @@ class FeaturedVideo
 
   def check_me
       flag = true
-
+      #binding.pry
       if self.update_date.nil?
         self.update_date = DateTime.now
         self.save
       end
 
-      request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
-      if request2.code == 0 or request2.code == 400
-        self.update_item
-        flag = true
-      end
+      #request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
+      #if request2.code == 0 or request2.code == 400
+      #  self.update_item
+      #  flag = true
+      #end#
 
       if self.update_date > 7.minutes.ago
         self.update_date = DateTime.now
-        self.save
+        #self.save
 
         request3 = Typhoeus.get(self.instagram_item['link'])
         if request3.code == 400 or request3.code ==0
