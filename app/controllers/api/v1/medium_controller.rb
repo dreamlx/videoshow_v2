@@ -29,6 +29,8 @@ class Api::V1::MediumController < Api::BaseController
     blist = BlackList.all.map{|b| b.username}
     instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
     
+    #debugger
+    binding.pry
     format_ins = []
     instagrams.each do |i|
       if i.check_me

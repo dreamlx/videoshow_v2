@@ -65,3 +65,9 @@ group :test do
   gem 'launchy'
   gem 'mongoid-rspec'
 end
+
+# gem 'ruby-debug'
+#gem 'ruby-debug', :require => 'ruby-debug'
+#gem "pry"
+gem 'pry-remote'
+gem 'pry-nav'
