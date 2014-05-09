@@ -85,37 +85,25 @@ class FeaturedVideo
         self.update_date = DateTime.now
         self.save
       end
-      
+
+      request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
+      if request2.code == 0 or request2.code == 400
+        self.update_item
+        flag = true
+      end
+
       if self.update_date > 7.minutes.ago
         self.update_date = DateTime.now
         self.save
 
-        request3 = Typhoeus.get("https://api.instagram.com/v1/media/#{self.instagram_item['id']}?client_id=80d957c56456440fa205a651372bbcb3")
+        request3 = Typhoeus.get(self.instagram_item['link'])
         if request3.code == 400 or request3.code ==0
           self.delete
           flag = false
-        elsif
-          request4 = Typhoeus.get(self.instagram_item['images']['low_resolution']['url'])
-          if request4.code == 400 or request4 == 0
-            self.delete
-            flag = false
-          elsif
-            request = Typhoeus.get(self.instagram_item['videos']['low_resolution']['url'])
-            if request.code == 400 or request == 0
-              self.delete
-              flag = false
-            end
-          end
-        end
-
-        request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
-        if request2.code == 0
+        else
           self.update_item
           flag = true
         end
-
-      else
-        flag = true
       end
 
       return flag
