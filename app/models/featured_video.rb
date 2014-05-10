@@ -6,7 +6,8 @@ class FeaturedVideo
   field :block_status, :type => Boolean, default: false
   field :update_date, :type => DateTime
 
-  default_scope desc(:"instagram_item.created_time").where(:"instagram_item.videos".nin => [nil, ""])
+  #default_scope desc(:"instagram_item.created_time").where(:"instagram_item.videos".nin => [nil, ""])
+  default_scope desc(:"instagram_item.created_time")
   scope :has_video, where(:"instagram_item.videos".nin => [nil, ""])
   scope :instagram_desc, desc(:"instagram_item.created_time")
   scope :instagram_asc, asc(:"instagram_item.created_time")
@@ -92,21 +93,20 @@ class FeaturedVideo
       #  self.update_item
       #  flag = true
       #end#
-
-      if self.update_date > 7.minutes.ago
-        self.update_date = DateTime.now
+      #binding.pry
+      if self.update_date < 10.minutes.ago
+        #self.update_date = DateTime.now
         #self.save
-
         request3 = Typhoeus.get(self.instagram_item['link'])
         if request3.code == 404 or request3.code == 400 or request3.code ==0
           self.delete
           flag = false
         else
+          self.update_date = DateTime.now
           self.update_item
           flag = true
         end
       end
-
       return flag
   end
 
@@ -122,8 +122,5 @@ class FeaturedVideo
     end
   end
   
-  def abc()
-     flag = true
-  end
   
 end
