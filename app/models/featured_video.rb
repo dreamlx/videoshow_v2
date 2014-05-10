@@ -11,6 +11,7 @@ class FeaturedVideo
   scope :instagram_desc, desc(:"instagram_item.created_time")
   scope :instagram_asc, asc(:"instagram_item.created_time")
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
+  scope :featured2, where(:"order_no".nin => [0]).desc(:"order_no")
 
   def format_me
       item = self.instagram_item
@@ -42,13 +43,13 @@ class FeaturedVideo
     #todo: min:before, max:after
     instagrams = self.new
 
-    FeaturedVideo.retryable(:tries => 3, :on => Timeout::Error) do
+    FeaturedVideo.retryable(:tries => 2, :on => Timeout::Error) do
       timeout(7) do
         instagram_collection = Instagram.tag_recent_media(tag)
 
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
-            self.create!(instagram_item: item, update_date: Time.now)
+            self.create!(instagram_item: item, update_date: Time.now,order_no:0)
           else
             item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
             item2.instagram_item = item
@@ -97,7 +98,7 @@ class FeaturedVideo
         #self.save
 
         request3 = Typhoeus.get(self.instagram_item['link'])
-        if request3.code == 400 or request3.code ==0
+        if request3.code == 404 or request3.code == 400 or request3.code ==0
           self.delete
           flag = false
         else
@@ -120,4 +121,9 @@ class FeaturedVideo
       item.save
     end
   end
+  
+  def abc()
+     flag = true
+  end
+  
 end

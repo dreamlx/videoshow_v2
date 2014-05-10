@@ -2,9 +2,10 @@ require 'timeout'
 
 class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
-    page = params[:page]
+    page = params[:page].to_i
     blist = BlackList.all.map{|b| b.username}
-    instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    instagrams = FeaturedVideo.filter_blacklist(blist).featured2.paginate(:page => page, per_page: 10)
     
     format_ins = []
     instagrams.each do |i|
@@ -13,14 +14,17 @@ class Api::V1::MediumController < Api::BaseController
         format_ins << item
       end
     end
+    
+    ReqCount.list_req_count(page,0,1)
 
     render json: format_ins.to_json, :callback => params[:callback]
   end
 
   def recent #tag_recent_media
-    page = params[:page]
+    page = params[:page].to_i
     blist = BlackList.all.map{|b| b.username}
-    instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    #instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
+    instagrams = FeaturedVideo.filter_blacklist(blist).instagram_desc.paginate(:page => page, per_page: 10)
     # annotation test test22222
     #binding.pry
     format_ins = []
@@ -31,8 +35,13 @@ class Api::V1::MediumController < Api::BaseController
       end
     end
 
+    # request count++
+    ReqCount.list_req_count(page,1,0)
+
     render json: format_ins.to_json, :callback => params[:callback]
   end
+
+  
 
   def show
     if params[:access_token].blank? or params[:id].blank?

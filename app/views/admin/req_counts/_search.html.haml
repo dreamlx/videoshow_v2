@@ -1,0 +1,11 @@
+.fieldset
+  = form_tag admin_req_counts_path, method: 'get' do
+    %p
+      %label from:
+      %input{ type: 'date', name: 'start_date', value: params[:start_date]}
+      %label to:
+      %input{ type: 'date', name: 'end_date', value: params[:end_date]}
+      %hr
+    %hr
+    %p
+      = submit_tag 'submit'
