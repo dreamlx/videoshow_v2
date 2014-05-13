@@ -3,22 +3,59 @@ require 'timeout'
 class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
     page = params[:page].to_i
-    blist = BlackList.all.map{|b| b.username}
-    #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
-    instagrams = FeaturedVideo.filter_blacklist(blist).featured2.paginate(:page => page, per_page: 10)
-    
-    format_ins = []
-    instagrams.each do |i|
-      if i.check_me
-        item = i.format_me
-        format_ins << item
-      end
-    end
-    
-    ReqCount.list_req_count(page,0,1)
+    format_ins = queryCache('Featured',page)
+
+    Thread.new{ReqCount.list_req_count(page,0,1)}
+    #ReqCount.list_req_count(page,0,1)
 
     render json: format_ins.to_json, :callback => params[:callback]
   end
+
+  # save Cache
+  def queryCache(type ='Featured' , page =1)
+    format_ins = []
+    configId = "Cache"+type+page.to_s
+    #FeaturedVideo.recent('videoshowapp') 
+    reqConfigCache = ReqConfigCache.where(:'configId' => configId).first
+    if(reqConfigCache == nil )
+      format_ins = queryPageFeaturedVideo(type,page)
+      ReqConfigCache.create!(configId: configId, type: type,page:page,content: format_ins,update_time:Time.new)
+    else
+      if reqConfigCache.update_time < 10.minutes.ago
+          format_ins = queryPageFeaturedVideo(type, page)  
+          reqConfigCache.content=format_ins
+          reqConfigCache.update_time=Time.new
+          reqConfigCache.save
+      else
+          format_ins = reqConfigCache.content
+      end
+    end    
+    return format_ins
+  end
+
+  def queryPageFeaturedVideo(type ='Featured' , page =1)
+    format_ins = []
+    blist = BlackList.all.map{|b| b.username}
+    case type
+      when "Featured"
+          #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+          instagrams = FeaturedVideo.filter_blacklist(blist).featured2.paginate(:page => page, per_page: 10)
+      when "Recent"
+          #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
+          instagrams = FeaturedVideo.filter_blacklist(blist).instagram_desc.paginate(:page => page, per_page: 10)
+    end
+    format_ins = []
+    instagrams.each do |i|
+      Thread.new{i.check_me}
+      #if i.check_me
+      item = i.format_me
+      format_ins << item
+      #end
+    end
+    return format_ins
+  end
+
+  
 
   def recent #tag_recent_media
     page = params[:page].to_i
@@ -29,14 +66,16 @@ class Api::V1::MediumController < Api::BaseController
     #binding.pry
     format_ins = []
     instagrams.each do |i|
-      if i.check_me
-        item = i.format_me
-        format_ins << item
-      end
+      Thread.new{i.check_me}
+      #if i.check_me
+      item = i.format_me
+      format_ins << item
+      #end
     end
 
     # request count++
-    ReqCount.list_req_count(page,1,0)
+    #ReqCount.list_req_count(page,1,0)
+    Thread.new{ReqCount.list_req_count(page,1,0)}
 
     render json: format_ins.to_json, :callback => params[:callback]
   end

@@ -43,8 +43,8 @@ class FeaturedVideo
   def self.recent(tag='videoshow')
     #todo: min:before, max:after
     instagrams = self.new
-
-    FeaturedVideo.retryable(:tries => 2, :on => Timeout::Error) do
+    #binding.pry
+    FeaturedVideo.retryable(:tries => 1, :on => Timeout::Error) do
       timeout(7) do
         instagram_collection = Instagram.tag_recent_media(tag)
 
@@ -64,8 +64,9 @@ class FeaturedVideo
   end
 
   def self.retryable(options = {})
+    #binding.pry
     opts = { :tries => 1, :on => Exception }.merge(options)
-
+    
     retry_exception, retries = opts[:on], opts[:tries]
 
     begin
@@ -81,13 +82,8 @@ class FeaturedVideo
   end
 
   def check_me
-      flag = true
-      #binding.pry
-      if self.update_date.nil?
-        self.update_date = DateTime.now
-        self.save
-      end
-
+    begin
+      #flag = true
       #request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
       #if request2.code == 0 or request2.code == 400
       #  self.update_item
@@ -100,18 +96,32 @@ class FeaturedVideo
         request3 = Typhoeus.get(self.instagram_item['link'])
         if request3.code == 404 or request3.code == 400 or request3.code ==0
           self.delete
-          flag = false
+          if(self.order_no>0)
+              ReqConfigCache.where(:"type".in => ["Featured", "Recent"]).delete()
+          else
+              #ReqConfigCache.where(:"type".in => ["Recent"]).delete()
+          end
+          #flag = false
         else
           self.update_date = DateTime.now
           self.update_item
-          flag = true
+          #flag = true
         end
       end
-      return flag
+    rescue
+        logger.info "[ERROR][check_me]=============================== :#{$!} at:#{$@}"
+    end
+    #return flag
   end
 
   def update_item
-      self.instagram_item  = Instagram.media_item(self.instagram_item["id"])
+      begin
+         #binding.pry
+         self.instagram_item  = Instagram.media_item(self.instagram_item["id"])
+         #self.instagram_item  = Instagram.media_item('701259366418567032_332914818')
+      rescue #=> err
+         logger.info "[ERROR][update_item]============================== :#{$!} at:#{$@}"
+      end
       self.save
   end
 

@@ -3,6 +3,7 @@ VideoshowV2::Application.routes.draw do
   root :to => 'home#index'
   match "home" => 'home#index'
   get '/home/callback' => 'home#callback'
+  #delete '/admin/featured_videos/' => '/admin/featured_videos'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   namespace :api do

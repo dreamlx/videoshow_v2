@@ -25,7 +25,7 @@ class ReqCount
     #Rails.logger.debug("event: #{@event.inspect}")
     #Rails.logger.debug("========================"+(Time.new.to_i))
     if page == 1
-       time = Time.new
+       time = Time.new + 8.hours #Beijing time
        day = time.strftime("%Y-%m-%d")
        reqCount = self.where(:'req_day' => day).first
        if(reqCount==nil)
