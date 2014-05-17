@@ -90,7 +90,7 @@ class FeaturedVideo
       #  flag = true
       #end#
       #binding.pry
-      if self.update_date < 10.minutes.ago
+      if self.update_date < 6.minutes.ago
         #self.update_date = DateTime.now
         #self.save
         request3 = Typhoeus.get(self.instagram_item['link'])

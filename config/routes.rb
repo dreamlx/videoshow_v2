@@ -27,6 +27,15 @@ VideoshowV2::Application.routes.draw do
           delete 'unlike_media'
         end
       end
+
+      resources :advert do
+        collection do
+          get 'homeTop'
+
+        end
+      end
+
+
     end
   end
 

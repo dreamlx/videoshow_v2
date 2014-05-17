@@ -1,0 +1,53 @@
+<%= form_for(@home_top_advert) do |f| %>
+  <% if @home_top_advert.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@home_top_advert.errors.count, "error") %> prohibited this home_top_advert from being saved:</h2>
+
+      <ul>
+      <% @home_top_advert.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :type %><br />
+    <%= f.text_field :type %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :pic_url %><br />
+    <%= f.text_field :pic_url %>
+  </div>
+  <div class="field">
+    <%= f.label :advert_url %><br />
+    <%= f.text_field :advert_url %>
+  </div>
+  <div class="field">
+    <%= f.label :advert_content %><br />
+    <%= f.text_area :advert_content %>
+  </div>
+  <div class="field">
+    <%= f.label :sort %><br />
+    <%= f.text_field :sort %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :ctime %><br />
+    <%= f.text_field :ctime %>
+  </div>
+  <div class="field">
+    <%= f.label :etime %><br />
+    <%= f.text_field :etime %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
