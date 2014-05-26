@@ -7,12 +7,13 @@ class FeaturedVideo
   field :update_date, :type => DateTime
 
   #default_scope desc(:"instagram_item.created_time").where(:"instagram_item.videos".nin => [nil, ""])
-  default_scope desc(:"instagram_item.created_time")
+  #default_scope desc(:"instagram_item.created_time")
   scope :has_video, where(:"instagram_item.videos".nin => [nil, ""])
   scope :instagram_desc, desc(:"instagram_item.created_time")
   scope :instagram_asc, asc(:"instagram_item.created_time")
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
   scope :featured2, where(:"order_no".nin => [0]).desc(:"order_no")
+  scope :featuredMaxOrderNo, where(:"order_no".nin => [0]).desc(:"order_no").limit(1)
 
   def format_me
       item = self.instagram_item
@@ -37,6 +38,17 @@ class FeaturedVideo
 
   def recommend!
     self.order_no = self.order_no + 1
+    self.save
+  end
+
+  # set up
+  def stick(orderNo=0)
+    self.order_no = orderNo + 1
+    self.save
+  end
+
+  def unstick!
+    self.order_no = 1
     self.save
   end
 

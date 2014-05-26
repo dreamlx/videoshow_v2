@@ -2,7 +2,7 @@
   = form_tag admin_featured_videos_path, method: 'get' do
     %p
       %span Recommend:
-      %select{name: "orderNo", value: params[:orderNo]}= options_for_select([["", ""],["No", "0"], ["Yes", "1"]])
+      %select{name: "orderNo", value: params[:orderNo]}= options_for_select([["", ""],["No", "0"], ["Yes", "1"]],params[:orderNo])
       /,{selected:params[:orderNo]=="0"}
       /,{selected: params[:orderNo]=="1"}
       %span User Name:

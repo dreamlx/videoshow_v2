@@ -3,6 +3,7 @@ class HomeTopAdvert
   field :type, type: Integer
   field :name, type: String
   field :pic_url, type: String
+  field :advert_activity, type: String
   field :advert_url, type: String
   field :advert_content, type: String
   field :sort, type: Integer,default:0

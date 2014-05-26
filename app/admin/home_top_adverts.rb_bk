@@ -73,16 +73,19 @@ ActiveAdmin.register HomeTopAdvert do
       #render :file => 'admin/home_top_adverts/new.html.erb'
       #binding.pry
       @home_top_advert = HomeTopAdvert.new
-      respond_to do |format|
-        format.html # new.html.erb
-        format.json { render :json => @home_top_advert }
-      end
+      #respond_to do |format|
+        #format.html # new.html.erb
+      #  format.html { render '/admin/home_top_adverts/new.html.erb'}
+      #  format.json { render :json => @home_top_advert }
+      #end
+      render active_admin_template('new.html.erb'),:layout => false
     end
 
 
     # GET /HomeTopAdvert/1/edit
     def edit
       @home_top_advert = HomeTopAdvert.find(params[:id])
+      render active_admin_template('edit.html.erb'),:layout => false
     end
 
     # POST /HomeTopAdvert
@@ -103,15 +106,15 @@ ActiveAdmin.register HomeTopAdvert do
         ##
 
         @home_top_advert = HomeTopAdvert.new(params[:homeTopAdvert])
-        respond_to do |format|
-          if @home_top_advert.save
-            format.html { redirect_to @home_top_advert, :notice => 'Home top advert was successfully created.' }
-            format.json { render :json => @home_top_advert, :status => :created, :location => @home_top_advert }
-          else
-            format.html { render :action => "new" }
-            format.json { render :json => @home_top_advert.errors, :status => :unprocessable_entity }
-          end
-        end
+        #respond_to do |format|
+        #  if @home_top_advert.save
+        #    format.html { redirect_to @home_top_advert, :notice => 'Home top advert was successfully created.' }
+        #    format.json { render :json => @home_top_advert, :status => :created, :location => @home_top_advert }
+        #  else
+        #    format.html { render :action => "new" }
+        #    format.json { render :json => @home_top_advert.errors, :status => :unprocessable_entity }
+        #  end
+        #end
     end
 
     # PUT /HomeTopAdvert/1
