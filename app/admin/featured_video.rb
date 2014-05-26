@@ -43,9 +43,9 @@ ActiveAdmin.register FeaturedVideo do
         link_to "Recommend", {action: "recommend", id: item, page:params[:page]||0,per_page:params[:per_page]||20,orderNo:params[:orderNo],userName:params[:userName]}, :method => :put,:class => 'button'
       end
     end
-    column :stick do |item|
-      item.order_no
-    end
+    # column :stick do |item|
+    #   item.order_no
+    # end
     column :stick do |item|
       if item.order_no == 1
         #link_to('Stick', stick_admin_featured_video_path(item), :method => :put,:class => 'button') 
