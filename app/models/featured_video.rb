@@ -63,6 +63,7 @@ class FeaturedVideo
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
             self.create!(instagram_item: item, update_date: Time.now,order_no:0)
+            Thread.new{ReqCount.list_req_count(1,0,0,1)}
           else
             item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
             item2.instagram_item = item

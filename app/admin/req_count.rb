@@ -14,7 +14,8 @@ ActiveAdmin.register ReqCount do
   index do                            
     column :req_day                     
     column :recent_num        
-    column :featured_num          
+    column :featured_num
+    column :share_num   
     #default_actions                   
   end 
 
