@@ -77,14 +77,14 @@ ActiveAdmin.register FeaturedVideo do
          if orderNo == 0
             items = FeaturedVideo.where(:"order_no"=> orderNo,:'instagram_item.user.username'=> params[:userName]).instagram_desc.page(params[:page]).per(params[:per_page]||20)
          else
-            items = FeaturedVideo.where(:order_no=>{'$gte' => orderNo},:'instagram_item.user.username'=> params[:userName]).desc(:"order_no").page(params[:page]).per(params[:per_page]||20)
+            items = FeaturedVideo.where(:order_no=>{'$gte' => orderNo},:'instagram_item.user.username'=> params[:userName]).desc(:"order_no").desc(:"instagram_item.created_time").page(params[:page]).per(params[:per_page]||20)
          end
       elsif !params[:orderNo].blank?
         orderNo = params[:orderNo].to_i;
         if orderNo == 0
           items = FeaturedVideo.where(:"order_no"=> orderNo).instagram_desc.page(params[:page]).per(params[:per_page]||20)
         else
-          items = FeaturedVideo.where(:order_no=>{'$gte' => orderNo}).desc(:"order_no").page(params[:page]).per(params[:per_page]||20)
+          items = FeaturedVideo.where(:order_no=>{'$gte' => orderNo}).desc(:"order_no").desc(:"instagram_item.created_time").page(params[:page]).per(params[:per_page]||20)
         end
       elsif !params[:userName].blank?
          items = FeaturedVideo.where(:"instagram_item.user.username" => params[:userName]).instagram_desc.page(params[:page]).per(params[:per_page]||20)

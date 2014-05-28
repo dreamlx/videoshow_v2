@@ -12,7 +12,7 @@ class FeaturedVideo
   scope :instagram_desc, desc(:"instagram_item.created_time")
   scope :instagram_asc, asc(:"instagram_item.created_time")
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
-  scope :featured2, where(:"order_no".nin => [0]).desc(:"order_no")
+  scope :featured2, where(:"order_no".nin => [0]).desc(:"order_no").desc(:"instagram_item.created_time")
   scope :featuredMaxOrderNo, where(:"order_no".nin => [0]).desc(:"order_no").limit(1)
 
   def format_me
