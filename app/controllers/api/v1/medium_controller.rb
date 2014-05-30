@@ -21,13 +21,17 @@ class Api::V1::MediumController < Api::BaseController
       format_ins = queryPageFeaturedVideo(type,page)
       ReqConfigCache.create!(configId: configId, type: type,page:page,content: format_ins,update_time:Time.new)
     else
+      format_ins = reqConfigCache.content
       if reqConfigCache.update_time < cacheMin.minutes.ago
-          format_ins = queryPageFeaturedVideo(type, page)  
-          reqConfigCache.content=format_ins
-          reqConfigCache.update_time=Time.new
-          reqConfigCache.save
-      else
-          format_ins = reqConfigCache.content
+        reqConfigCache.update_time=Time.new
+        reqConfigCache.save
+        Thread.new{
+            #binding.pry
+            format_ins = queryPageFeaturedVideo(type, page)  
+            reqConfigCache.content=format_ins
+            #reqConfigCache.update_time=Time.new
+            reqConfigCache.save
+        }
       end
     end    
     return format_ins
