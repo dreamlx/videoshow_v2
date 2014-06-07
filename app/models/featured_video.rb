@@ -109,11 +109,13 @@ class FeaturedVideo
         request3 = Typhoeus.get(self.instagram_item['link'])
         if request3.code == 404 or request3.code == 400 #or request3.code ==0
           if(self.order_no>0)
+              self.update_date = DateTime.now
+              self.update_item
               ReqConfigCache.where(:"type".in => ["Featured", "Recent"]).delete()
           else
+              self.delete
               ReqConfigCache.where(:"type".in => ["Recent"]).delete()
           end
-          self.delete
           #flag = false
         else
           self.update_date = DateTime.now
