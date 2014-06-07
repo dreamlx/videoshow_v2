@@ -12,7 +12,7 @@ class Api::V1::MediumController < Api::BaseController
   end
 
   # save Cache
-  def queryCache(type ='Featured' , page =1 , cacheMin =10)
+  def queryCache(type ='Recent' , page =1 , cacheMin =10)
     format_ins = []
     configId = "Cache"+type+page.to_s
     #FeaturedVideo.recent('videoshowapp') 
@@ -37,7 +37,7 @@ class Api::V1::MediumController < Api::BaseController
     return format_ins
   end
 
-  def queryPageFeaturedVideo(type ='Featured' , page =1)
+  def queryPageFeaturedVideo(type ='Recent' , page =1)
     format_ins = []
     blist = BlackList.all.map{|b| b.username}
     case type
@@ -54,6 +54,8 @@ class Api::V1::MediumController < Api::BaseController
       Thread.new{i.check_me}
       #if i.check_me
       item = i.format_me
+      #item.store("order_no",i.order_no)
+      item.store("vs_stick", i.order_no>1?1:0) #Client Stick
       format_ins << item
       #end
     end
