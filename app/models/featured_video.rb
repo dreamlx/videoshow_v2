@@ -10,10 +10,17 @@ class FeaturedVideo
   #default_scope desc(:"instagram_item.created_time")
   scope :has_video, where(:"instagram_item.videos".nin => [nil, ""])
   scope :instagram_desc, desc(:"instagram_item.created_time")
+  scope :recent_block_desc, where(:"block_status" => false).desc(:"instagram_item.created_time")
   scope :instagram_asc, asc(:"instagram_item.created_time")
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
-  scope :featured2, where(:"order_no".nin => [0]).desc(:"order_no").desc(:"instagram_item.created_time")
+  scope :featured_block_desc, where(:"order_no".ne => 0,:"block_status" => false).desc(:"order_no").desc(:"instagram_item.created_time")
   scope :featuredMaxOrderNo, where(:"order_no".nin => [0]).desc(:"order_no").limit(1)
+  scope :from_to_block, ->(unpublish=nil) {
+          #binding.pry
+          if !unpublish.blank?
+            where(:"block_status" =>unpublish)
+          end
+        }
 
   def format_me
       item = self.instagram_item
@@ -52,6 +59,16 @@ class FeaturedVideo
     self.save
   end
 
+  def upBlock
+    self.block_status = true
+    self.save
+  end
+
+  def upBlock!
+    self.block_status = false
+    self.save
+  end
+
   def self.recent(tag='videoshow')
     #todo: min:before, max:after
     instagrams = self.new
@@ -62,7 +79,7 @@ class FeaturedVideo
 
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
-            self.create!(instagram_item: item, update_date: Time.now,order_no:0)
+            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
             Thread.new{ReqCount.list_req_count(1,0,0,1)}
           else
             item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
@@ -94,7 +111,7 @@ class FeaturedVideo
     end
   end
 
-  def check_me
+  def check_me(page=1)
     begin
       #flag = true
       #request2 = Typhoeus.get(self.instagram_item['user']['profile_picture'])
@@ -108,12 +125,12 @@ class FeaturedVideo
         #self.save
         request3 = Typhoeus.get(self.instagram_item['link'])
         if request3.code == 404 or request3.code == 400 #or request3.code ==0
-          if(self.order_no>0)
+          if(self.order_no>0 && page==1)
               self.update_date = DateTime.now
               self.update_item
-              ReqConfigCache.where(:"type".in => ["Featured", "Recent"]).delete()
+              #ReqConfigCache.where(:"type".in => ["Featured", "Recent"]).delete()
           else
-              self.delete
+              item.upBlock
               ReqConfigCache.where(:"type".in => ["Recent"]).delete()
           end
           #flag = false

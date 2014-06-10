@@ -43,15 +43,15 @@ class Api::V1::MediumController < Api::BaseController
     case type
       when "Featured"
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
-          instagrams = FeaturedVideo.filter_blacklist(blist).featured2.paginate(:page => page, per_page: 10)
+          instagrams = FeaturedVideo.filter_blacklist(blist).featured_block_desc.paginate(:page => page, per_page: 10)
       when "Recent"
           #binding.pry
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
-          instagrams = FeaturedVideo.filter_blacklist(blist).instagram_desc.paginate(:page => page, per_page: 10)
+          instagrams = FeaturedVideo.filter_blacklist(blist).recent_block_desc.paginate(:page => page, per_page: 10)
     end
     format_ins = []
     instagrams.each do |i|
-      Thread.new{i.check_me}
+      Thread.new{i.check_me(page)}
       #if i.check_me
       item = i.format_me
       #item.store("order_no",i.order_no)
