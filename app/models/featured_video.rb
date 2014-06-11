@@ -130,7 +130,7 @@ class FeaturedVideo
               self.update_item
               #ReqConfigCache.where(:"type".in => ["Featured", "Recent"]).delete()
           else
-              item.upBlock
+              self.upBlock
               ReqConfigCache.where(:"type".in => ["Recent"]).delete()
           end
           #flag = false
