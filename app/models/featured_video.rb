@@ -157,7 +157,8 @@ class FeaturedVideo
       end
     rescue
         #binding.pry
-        logger.info "[ERROR][check_me]=============================== :#{$!} at:#{$@}"
+        logger.info "[ERROR][recentData]["+tag+"]["+maxId+"]=============================== :#{$!} at:#{$@}"
+        #self.recentData(tag,maxId)
     end
   end
 
