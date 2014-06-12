@@ -69,28 +69,43 @@ class FeaturedVideo
     self.save
   end
 
-  def self.recent(tag='videoshow')
-    #todo: min:before, max:after
-    instagrams = self.new
-    #binding.pry
+  def self.recent_(tag='videoshow',minId="")
+    options={}
+    if !minId.blank?
+      options["min_id"]=minId
+    end
+    instagram_collection = {}
     FeaturedVideo.retryable(:tries => 1, :on => Timeout::Error) do
-      timeout(7) do
-        instagram_collection = Instagram.tag_recent_media(tag)
-
-        instagram_collection.reject { |i| i.type != 'video' }.each do |item|
-          if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
-            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
-            Thread.new{ReqCount.list_req_count(1,0,0,1)}
-          else
-            item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
-            item2.instagram_item = item
-            item2.save
-          end
-        end
+      timeout(20) do
+         instagram_collection = Instagram.tag_recent_media(tag,options)
       end
     end
+    return instagram_collection
+  end
 
-    return instagrams
+  def self.recent(tag='videoshow',minId="")
+    #todo: min:before, max:after
+    #instagrams = self.new
+    #binding.pry
+    instagram_collection = recent_(tag,minId)
+    if instagram_collection.size>0 
+      instagram_collection.reject { |i| i.type != 'video' }.each do |item|
+        if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
+          self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
+          Thread.new{ReqCount.list_req_count(1,0,0,1)}
+        else
+          item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
+          item2.instagram_item = item
+          item2.save
+        end
+      end
+      if instagram_collection.pagination.next_min_id !=nil
+         minId = instagram_collection.pagination.next_min_id
+         minId = self.recent(tag,minId)
+         #return minId
+      end
+    end
+    return minId
   end
 
   def self.retryable(options = {})
@@ -110,6 +125,41 @@ class FeaturedVideo
       end
     end
   end
+
+
+  def self.recentData(tag='videoshow',options={})
+    #todo: min:before, max:after
+    begin
+      instagram_collection = Instagram.tag_recent_media(tag,options)
+      #binding.pry
+      if instagram_collection.size>0 
+        instagram_collection.reject { |i| i.type != 'video' }.each do |item|
+          if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
+            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
+          else
+            # item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
+            # item2.instagram_item = item
+            # item2.save
+          end
+        end
+        options={}
+        if instagram_collection.pagination.next_max_id !=nil
+           options["max_id"]=instagram_collection.pagination.next_max_id
+           self.recentData(tag,options)
+        end
+      else
+        instagram_collection.pagination["options"]=options
+        logger.info instagram_collection.to_s
+      end
+    rescue
+        #binding.pry
+        logger.info "[ERROR][check_me]=============================== :#{$!} at:#{$@}"
+    end
+  end
+
+
+
+
 
   def check_me(page=1)
     begin

@@ -21,7 +21,7 @@
 
 set :environment, "development"
 
-every 2.minutes do
+every 4.minutes do
 #every 90.seconds do
   # 自动从远端获取有tag的instagram media
   runner "Category.get_all_tags"

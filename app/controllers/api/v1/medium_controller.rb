@@ -4,7 +4,6 @@ class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
     page = params[:page].to_i
     format_ins = queryCache('Featured',page,10)
-
     Thread.new{ReqCount.list_req_count(page,0,1,0)}
     #ReqCount.list_req_count(page,0,1)
     #FeaturedVideo.recent()
@@ -84,6 +83,16 @@ class Api::V1::MediumController < Api::BaseController
     # request count++
     Thread.new{ReqCount.list_req_count(page,1,0,0)}
 
+    render json: format_ins.to_json, :callback => params[:callback]
+  end
+
+  #get Instagram Tag Recent Data
+  def getRecentData
+    tag = params[:tag]
+    #binding.pry
+    Thread.new{FeaturedVideo.recentData(tag)}
+    #Category.get_all_tags
+    format_ins={:ret=>"running..."}
     render json: format_ins.to_json, :callback => params[:callback]
   end
 
