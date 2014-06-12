@@ -90,7 +90,7 @@ class Api::V1::MediumController < Api::BaseController
   def getRecentData
     tag = params[:tag]
     #binding.pry
-    Thread.new{FeaturedVideo.recentData(tag)}
+    Thread.new{FeaturedVideo.recentData(tag,"")}
     #Category.get_all_tags
     format_ins={:ret=>"running..."}
     render json: format_ins.to_json, :callback => params[:callback]

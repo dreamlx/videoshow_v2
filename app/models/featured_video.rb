@@ -69,11 +69,33 @@ class FeaturedVideo
     self.save
   end
 
-  def self.recent_(tag='videoshow',minId="")
+  def self.retryable(options = {})
+    #binding.pry
+    opts = { :tries => 1, :on => Exception }.merge(options)
+    
+    retry_exception, retries = opts[:on], opts[:tries]
+
+    begin
+      return yield
+    rescue retry_exception
+      if (retries -= 1) > 0
+        sleep 2
+        retry
+      else
+        logger.info 'TimeOut:get tag_recent_media'
+      end
+    end
+  end
+
+  def self.recent_(tag='videoshow',minId="",maxId="")
     options={}
     if !minId.blank?
       options["min_id"]=minId
     end
+    if !maxId.blank?
+      options["max_id"]=maxId
+    end 
+    #binding.pry
     instagram_collection = {}
     FeaturedVideo.retryable(:tries => 1, :on => Timeout::Error) do
       timeout(20) do
@@ -87,7 +109,7 @@ class FeaturedVideo
     #todo: min:before, max:after
     #instagrams = self.new
     #binding.pry
-    instagram_collection = recent_(tag,minId)
+    instagram_collection = recent_(tag,minId,"")
     if instagram_collection.size>0 
       instagram_collection.reject { |i| i.type != 'video' }.each do |item|
         if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
@@ -108,29 +130,11 @@ class FeaturedVideo
     return minId
   end
 
-  def self.retryable(options = {})
-    #binding.pry
-    opts = { :tries => 1, :on => Exception }.merge(options)
-    
-    retry_exception, retries = opts[:on], opts[:tries]
 
-    begin
-      return yield
-    rescue retry_exception
-      if (retries -= 1) > 0
-        sleep 2
-        retry
-      else
-        logger.info 'TimeOut:get tag_recent_media'
-      end
-    end
-  end
-
-
-  def self.recentData(tag='videoshow',options={})
+  def self.recentData(tag='videoshow',maxId="")
     #todo: min:before, max:after
     begin
-      instagram_collection = Instagram.tag_recent_media(tag,options)
+      instagram_collection = recent_(tag,"",maxId)
       #binding.pry
       if instagram_collection.size>0 
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
@@ -144,8 +148,8 @@ class FeaturedVideo
         end
         options={}
         if instagram_collection.pagination.next_max_id !=nil
-           options["max_id"]=instagram_collection.pagination.next_max_id
-           self.recentData(tag,options)
+           maxId = instagram_collection.pagination.next_max_id
+           self.recentData(tag,maxId)
         end
       else
         instagram_collection.pagination["options"]=options
