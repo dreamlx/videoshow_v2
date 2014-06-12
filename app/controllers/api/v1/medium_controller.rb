@@ -89,8 +89,9 @@ class Api::V1::MediumController < Api::BaseController
   #get Instagram Tag Recent Data
   def getRecentData
     tag = params[:tag]
+    maxId = params[:maxId]
     #binding.pry
-    Thread.new{FeaturedVideo.recentData(tag,"")}
+    Thread.new{FeaturedVideo.recentData(tag,maxId)}
     #Category.get_all_tags
     format_ins={:ret=>"running..."}
     render json: format_ins.to_json, :callback => params[:callback]
