@@ -153,7 +153,7 @@ class FeaturedVideo
         end
       else
         instagram_collection.pagination["options"]=options
-        logger.info instagram_collection.to_s
+        logger.info "[END][recentData]" + (instagram_collection.to_s)
       end
     rescue
         #binding.pry

@@ -10,6 +10,8 @@
       %span User Name:
       %input{ type: 'text', name: 'userName', value: params[:userName]}
 
+      %span Resolution:
+      %select{name: "resolution", value: params[:resolution]}= options_for_select([["", ""], ["big", "1"],["middle", "2"],["small", "3"],["other", "4"]],params[:resolution])
       
     %hr
     %p

@@ -90,10 +90,15 @@ class Api::V1::MediumController < Api::BaseController
   def getRecentData
     tag = params[:tag]
     maxId = params[:maxId]
+    format_ins = []
     #binding.pry
-    Thread.new{FeaturedVideo.recentData(tag,maxId)}
+    if tag == 'videoshowapp' or tag =='videoshow'
+       Thread.new{FeaturedVideo.recentData(tag,maxId)}
+       format_ins={:ret=>"running..."}
+    else
+       format_ins={:ret=>"tag error..."}
+    end
     #Category.get_all_tags
-    format_ins={:ret=>"running..."}
     render json: format_ins.to_json, :callback => params[:callback]
   end
 
