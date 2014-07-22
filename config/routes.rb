@@ -35,9 +35,12 @@ VideoshowV2::Application.routes.draw do
 
         end
       end
-
-
     end
+    namespace :v2 do
+       get 'medium/featured' => 'medium#featured_new'
+       get 'medium/recent' => 'medium#recent_new'
+    end
+
   end
 
 =begin

@@ -1,13 +1,20 @@
 require 'timeout'
 
-class Api::V1::MediumController < Api::BaseController
-  def featured #featured_collection
+class Api::V2::MediumController < Api::BaseController
+
+  def featured_new #IOS NEW
     page = params[:page].to_i
     format_ins = queryCache('Featured',page,10)
     Thread.new{ReqCount.list_req_count(page,0,1,0)}
-    #ReqCount.list_req_count(page,0,1)
-    #FeaturedVideo.recent()
-    render json: format_ins.to_json, :callback => params[:callback]
+    data = {}
+    if(format_ins != nil && format_ins.size>0)
+      data.store("ret", 1)
+    else
+      data.store("ret", 0)
+    end
+    data.store("datalist", format_ins)
+    data.store("page", page)
+    render json: data.to_json, :callback => params[:callback]
   end
 
   # save Cache
@@ -62,29 +69,20 @@ class Api::V1::MediumController < Api::BaseController
     return format_ins
   end
 
-  
 
-  def recent #tag_recent_media
+  def recent_new #IOS NEW
     page = params[:page].to_i
-    # blist = BlackList.all.map{|b| b.username}
-    # #instagrams = FeaturedVideo.filter_blacklist(blist).has_video.instagram_desc.paginate(:page => page, per_page: 10)
-    # instagrams = FeaturedVideo.filter_blacklist(blist).instagram_desc.paginate(:page => page, per_page: 10)
-    # # annotation test test22222
-    # #binding.pry
-    # format_ins = []
-    # instagrams.each do |i|
-    #   Thread.new{i.check_me}
-    #   #if i.check_me
-    #   item = i.format_me
-    #   format_ins << item
-    #   #end
-    # end
-
-    format_ins = queryCache('Recent',page,5)
-    # request count++
-    Thread.new{ReqCount.list_req_count(page,1,0,0)}
-
-    render json: format_ins.to_json, :callback => params[:callback]
+    format_ins = queryCache('Recent',page,10)
+    Thread.new{ReqCount.list_req_count(page,0,1,0)}
+    data = {}
+    if(format_ins != nil && format_ins.size>0)
+      data.store("ret", 1)
+    else
+      data.store("ret", 0)
+    end
+    data.store("datalist", format_ins)
+    data.store("page", page)
+    render json: data.to_json, :callback => params[:callback]
   end
 
   #get Instagram Tag Recent Data
