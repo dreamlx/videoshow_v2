@@ -55,6 +55,7 @@ class Api::V1::MediumController < Api::BaseController
       item = i.format_me
       #item.store("order_no",i.order_no)
       item.store("vs_stick", i.order_no>1?1:0) #Client Stick
+      item.store("vs_page", page)
       format_ins << item
       #end
     end
