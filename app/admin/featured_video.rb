@@ -208,7 +208,7 @@ ActiveAdmin.register FeaturedVideo do
       fvParams.store("unpublish", params[:unpublish])
       fvParams.store("resolution", params[:resolution])
       fvParams.store("start_date", params[:start_date])
-      fvParams.store("end_date", params[:endDate])
+      fvParams.store("end_date", params[:end_date])
       session[:fvParams] = fvParams
 
 
