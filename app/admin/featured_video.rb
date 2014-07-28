@@ -199,6 +199,10 @@ ActiveAdmin.register FeaturedVideo do
       else
          items = FeaturedVideo.from_to_start(params[:start_date]).from_to_end(params[:end_date]).from_to_block(params[:unpublish]).instagram_desc.page(params[:page]).per(params[:per_page]||20)
       end
+
+      if !params[:clearCache].blank? && params[:clearCache] =="1"
+        ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
+      end
        
       fvParams = {}
       fvParams.store("page", params[:page]||1)
@@ -267,7 +271,7 @@ ActiveAdmin.register FeaturedVideo do
   member_action :uncommend, :method => :put do
     item = FeaturedVideo.find(params[:id])
     item.uncommend!
-    ReqConfigCache.where(:"type".in => ["Featured"]).delete()
+    #ReqConfigCache.where(:"type".in => ["Featured"]).delete()
     redirect_to   action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
   end
 
@@ -277,14 +281,14 @@ ActiveAdmin.register FeaturedVideo do
     itemMax = FeaturedVideo.featuredMaxOrderNo.first()
     orderNo = itemMax.order_no
     item.stick(orderNo)
-    ReqConfigCache.where(:"type".in => ["Featured"]).delete()
+    #ReqConfigCache.where(:"type".in => ["Featured"]).delete()
     redirect_to  action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
   end
 
   member_action :unstick, :method => :put do 
     item = FeaturedVideo.find(params[:id])
     item.unstick!
-    ReqConfigCache.where(:"type".in => ["Featured"]).delete()
+    #ReqConfigCache.where(:"type".in => ["Featured"]).delete()
     redirect_to  action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
   end
 
@@ -292,7 +296,7 @@ ActiveAdmin.register FeaturedVideo do
     #binding.pry
     item = FeaturedVideo.find(params[:id])
     item.delete
-    ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
+    #ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
     redirect_to   action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
   end
 
@@ -300,7 +304,7 @@ ActiveAdmin.register FeaturedVideo do
     #binding.pry
     item = FeaturedVideo.find(params[:id])
     item.upBlock
-    ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
+    #ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
     redirect_to   action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
   end
 
@@ -308,7 +312,7 @@ ActiveAdmin.register FeaturedVideo do
     #binding.pry
     item = FeaturedVideo.find(params[:id])
     item.upBlock!
-    ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
+   # ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
     redirect_to   action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
   end
   

@@ -17,7 +17,11 @@
 
       %span Resolution:
       %select{name: "resolution", value: params[:resolution]}= options_for_select([["", ""], ["big", "1"],["middle", "2"],["small", "3"],["other", "4"]],params[:resolution])
-      
+
+      %span 
+      %label Clear the cache:
+      %input{ type: 'checkbox', name: 'clearCache', value: "1"}
+      %label 
     %hr
     %p
       = submit_tag 'submit'
