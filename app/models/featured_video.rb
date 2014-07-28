@@ -5,6 +5,7 @@ class FeaturedVideo
   field :order_no, :type => Integer, default: 0
   field :block_status, :type => Boolean, default: false
   field :update_date, :type => DateTime
+  #field :created_time, :type => String
 
   #default_scope desc(:"instagram_item.created_time").where(:"instagram_item.videos".nin => [nil, ""])
   #default_scope desc(:"instagram_item.created_time")
@@ -21,6 +22,33 @@ class FeaturedVideo
             where(:"block_status" =>unpublish)
           end
         }
+  scope :from_to_start, ->(start_date=nil) {
+          if !start_date.blank?
+            #Date.strptime("2017-09-10")
+            #Date.strptime("{2017-09-10}", "{ %Y %m %d }")
+            #Date.strptime("2017-09-10", "{%s}")
+            #1406369807  1406369734 1406369713
+            #t = Date.strptime("1406369713","%Y-%m-%d").to_time
+            #t = Date.strptime("1406369713").to_time
+            #Time.at(1406498272).to_formatted_s(:db) 
+            #where(instagram_item.created_time:  {'$gte' => start_date})
+            t = start_date.to_time.to_i.to_s
+            #binding.pry
+            where(:"instagram_item.created_time" =>   {'$gte' => t})
+            #where(created_time: {'$gte' => t})
+          end
+        }
+  scope :from_to_end, ->(end_date=nil) {
+          if !end_date.blank?
+            t = (end_date+" 23:59:59").to_time.to_i.to_s
+            where(:"instagram_item.created_time" =>   {'$lte' => t})
+            #where(created_time: {'$lte' => t})
+          end
+        }
+  scope :instagram_likes_count_desc, desc(:"instagram_item.likes.count").limit(10)
+  scope :instagram_likes_count_gte, ->(count) {
+          where(:"instagram_item.likes.count" =>   {'$gte' => count})
+        }    
 
   def format_me
       item = self.instagram_item
@@ -44,7 +72,8 @@ class FeaturedVideo
   end
 
   def recommend!
-    self.order_no = self.order_no + 1
+    #self.order_no = self.order_no + 1
+    self.order_no = 1
     self.save
   end
 
@@ -97,8 +126,8 @@ class FeaturedVideo
     end 
     #binding.pry
     instagram_collection = {}
-    FeaturedVideo.retryable(:tries => 1, :on => Timeout::Error) do
-      timeout(20) do
+    FeaturedVideo.retryable(:tries => 0, :on => Timeout::Error) do
+      timeout(22) do
          instagram_collection = Instagram.tag_recent_media(tag,options)
       end
     end
@@ -109,23 +138,27 @@ class FeaturedVideo
     #todo: min:before, max:after
     #instagrams = self.new
     #binding.pry
-    instagram_collection = recent_(tag,minId,"")
-    if instagram_collection.size>0 
-      instagram_collection.reject { |i| i.type != 'video' }.each do |item|
-        if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
-          self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
-          Thread.new{ReqCount.list_req_count(1,0,0,1)}
-        else
-          item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
-          item2.instagram_item = item
-          item2.save
+    begin
+      instagram_collection = recent_(tag,minId,"")
+      if instagram_collection.size>0 
+        instagram_collection.reject { |i| i.type != 'video' }.each do |item|
+          if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
+            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
+            Thread.new{ReqCount.list_req_count(1,0,0,1)}
+          else
+            item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
+            item2.instagram_item = item
+            item2.save
+          end
+        end
+        if instagram_collection.pagination.next_min_id !=nil
+           minId = instagram_collection.pagination.next_min_id
+           minId = self.recent(tag,minId)
+           #return minId
         end
       end
-      if instagram_collection.pagination.next_min_id !=nil
-         minId = instagram_collection.pagination.next_min_id
-         minId = self.recent(tag,minId)
-         #return minId
-      end
+    rescue
+        logger.info "[ERROR][recent1]["+tag+"]["+maxId+"]=============================== :#{$!} at:#{$@}"
     end
     return minId
   end
@@ -140,6 +173,7 @@ class FeaturedVideo
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
             self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
+            #,created_time:item.created_time
           else
             # item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
             # item2.instagram_item = item
@@ -180,15 +214,17 @@ class FeaturedVideo
         #self.save
         request3 = Typhoeus.get(self.instagram_item['link'])
         if request3.code == 404 or request3.code == 400 #or request3.code ==0
-          if(self.order_no>0 && page==1)
-              self.update_date = DateTime.now
-              self.update_item
-              #ReqConfigCache.where(:"type".in => ["Featured", "Recent"]).delete()
+          self.delete
+          if(self.order_no>0)
+              #self.update_date = DateTime.now
+              #self.update_item
+              ReqConfigCache.where(:"type".in => ["Featured", "Recent"]).delete()
           else
-              self.upBlock
+              #self.upBlock
               ReqConfigCache.where(:"type".in => ["Recent"]).delete()
           end
           #flag = false
+          
         else
           self.update_date = DateTime.now
           self.update_item
@@ -216,6 +252,24 @@ class FeaturedVideo
     self.limit(limitnum).skip(skipnum).each do |item|
       item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
       item.save
+    end
+  end
+
+  def self.up_all_create_time
+    FeaturedVideo.all.each do |item|
+      #item.created_time=instagram_item.created_time
+      #item.save
+    end
+  end
+
+  def self.auto_likes
+    time = Time.new-1.days
+    day = time.strftime("%Y-%m-%d")
+    instagrams = []
+    #binding.pry
+    instagrams = FeaturedVideo.from_to_start(day).from_to_end(day).instagram_likes_count_gte(0).instagram_likes_count_desc#.page(1).per(10)
+    instagrams.all.each do |item|
+        item.recommend!
     end
   end
   

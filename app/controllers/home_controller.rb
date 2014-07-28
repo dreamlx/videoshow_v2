@@ -5,4 +5,10 @@ class HomeController < ApplicationController
   def callback
     
   end
+  
+  def callback_i
+    
+  end
+
+
 end

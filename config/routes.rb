@@ -3,6 +3,7 @@ VideoshowV2::Application.routes.draw do
   root :to => 'home#index'
   match "home" => 'home#index'
   get '/home/callback' => 'home#callback'
+  get '/home/callback_i' => 'home#callback_i'
   #delete '/admin/featured_videos/' => '/admin/featured_videos'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -37,8 +38,10 @@ VideoshowV2::Application.routes.draw do
       end
     end
     namespace :v2 do
-       get 'medium/featured' => 'medium#featured_new'
-       get 'medium/recent' => 'medium#recent_new'
+      get '/oauth/connect' => 'oauth#connect'
+      get '/oauth/callback' => 'oauth#callback'
+      get 'medium/featured' => 'medium#featured_new'
+      get 'medium/recent' => 'medium#recent_new'
     end
 
   end

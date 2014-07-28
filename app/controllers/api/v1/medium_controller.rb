@@ -96,7 +96,14 @@ class Api::V1::MediumController < Api::BaseController
     if tag == 'videoshowapp' or tag =='videoshow'
        Thread.new{FeaturedVideo.recentData(tag,maxId)}
        format_ins={:ret=>"running..."}
+    elsif tag == 'xxw_create_time'
+       Thread.new{FeaturedVideo.up_all_create_time()}
+       format_ins={:ret=>"create_time running2..."}
+    elsif tag == 'auto_likes'
+       Thread.new{FeaturedVideo.auto_likes()}
+       format_ins={:ret=>"auto_likes running..."}
     else
+      
        format_ins={:ret=>"tag error..."}
     end
     #Category.get_all_tags

@@ -1,6 +1,11 @@
 .fieldset
   = form_tag admin_featured_videos_path, method: 'get' do
     %p
+      %label from:
+      %input{ type: 'date', name: 'start_date', value: params[:start_date]}
+      %label to:
+      %input{ type: 'date', name: 'end_date', value: params[:end_date]}
+      %label 
       %span Recommend:
       %select{name: "orderNo", value: params[:orderNo]}= options_for_select([["", ""], ["Yes", "1"],["No", "0"]],params[:orderNo])
       /,{selected:params[:orderNo]=="0"}
