@@ -16,10 +16,34 @@ class FeaturedVideo
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
   scope :featured_block_desc, where(:"order_no".ne => 0,:"block_status" => false).desc(:"order_no").desc(:"instagram_item.created_time")
   scope :featuredMaxOrderNo, where(:"order_no".nin => [0]).desc(:"order_no").limit(1)
+  scope :instagram_param_desc, ->(sortParam='created_time') {
+          #binding.pry
+          if sortParam=='created_time'
+            desc(:"instagram_item.created_time")
+          elsif sortParam=='recommend'
+            desc(:"order_no")
+          elsif sortParam=='likes_count'
+            desc(:"instagram_item.likes.count")
+          end
+        }
   scope :from_to_block, ->(unpublish=nil) {
           #binding.pry
           if !unpublish.blank?
             where(:"block_status" =>unpublish)
+          end
+        }
+  scope :from_to_userName, ->(userName=nil) {
+          if !userName.blank?
+            where(:"instagram_item.user.username" =>userName)
+          end
+        }
+  scope :from_to_orderNo, ->(orderNo=nil) {
+          if !orderNo.blank?
+            if orderNo == 0
+              where(:"order_no" => orderNo)
+            else
+              where(:order_no=>{'$gte' => orderNo})
+            end
           end
         }
   scope :from_to_start, ->(start_date=nil) {
