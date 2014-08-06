@@ -24,6 +24,8 @@ class FeaturedVideo
             desc(:"order_no")
           elsif sortParam=='likes_count'
             desc(:"instagram_item.likes.count")
+          else
+            desc(:"instagram_item.created_time")
           end
         }
   scope :from_to_block, ->(unpublish=nil) {

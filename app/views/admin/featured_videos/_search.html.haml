@@ -20,11 +20,11 @@
       %span 
       %label &nbsp;
       %span Sort parameters:
-      %input{ type: 'radio', name: 'sortParam', value: "created_time",checked:params[:sortParam]}
+      %input{ type: 'radio', name: 'sortParam', value: "created_time",checked: params[:sortParam]=="created_time" ? true : nil}
       %span time
-      %input{ type: 'radio', name: 'sortParam', value: "recommend",checked:params[:sortParam]}
+      %input{ type: 'radio', name: 'sortParam', value: "recommend",checked: params[:sortParam]=="recommend" ? true : nil}
       %span recommend
-      %input{ type: 'radio', name: 'sortParam', value: "likes_count",checked:params[:sortParam]}
+      %input{ type: 'radio', name: 'sortParam', value: "likes_count",checked: params[:sortParam]=="likes_count" ? true : nil}
       %span likes
       %span 
       %label &nbsp;
