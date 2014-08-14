@@ -21,7 +21,7 @@ class FeaturedVideo
           if sortParam=='created_time'
             desc(:"instagram_item.created_time")
           elsif sortParam=='recommend'
-            desc(:"order_no")
+            desc(:"order_no").desc(:"instagram_item.created_time")
           elsif sortParam=='likes_count'
             desc(:"instagram_item.likes.count")
           else
@@ -213,6 +213,7 @@ class FeaturedVideo
            maxId = instagram_collection.pagination.next_max_id
            self.recentData(tag,maxId)
         end
+        logger.info "[running][recentData]" + maxId
       else
         instagram_collection.pagination["options"]=options
         logger.info "[END][recentData]" + (instagram_collection.to_s)
