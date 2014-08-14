@@ -237,7 +237,7 @@ class FeaturedVideo
       #  flag = true
       #end#
       #binding.pry
-      if self.update_date < 6.minutes.ago
+      if self.update_date < 10.minutes.ago
         #self.update_date = DateTime.now
         #self.save
         request3 = Typhoeus.get(self.instagram_item['link'])
@@ -268,18 +268,25 @@ class FeaturedVideo
   def update_item
       begin
          #binding.pry
-         self.instagram_item  = Instagram.media_item(self.instagram_item["id"])
+         media_item = Instagram.media_item(self.instagram_item["id"]);
+         if media_item["created_time"] !=nil
+            self.instagram_item  = media_item
+         end
          #self.instagram_item  = Instagram.media_item('701259366418567032_332914818')
       rescue #=> err
          logger.info "[ERROR][update_item]============================== :#{$!} at:#{$@}"
-      end
+      end 
       self.save
   end
 
   def self.update_all(skipnum = 30, limitnum=100)
     self.limit(limitnum).skip(skipnum).each do |item|
-      item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
-      item.save
+      #item.instagram_item  = Instagram.media_item(item.instagram_item["id"])
+       media_item = Instagram.media_item(self.instagram_item["id"]);
+       if media_item["created_time"] !=nil
+          item.instagram_item  = media_item
+          item.save
+       end
     end
   end
 
