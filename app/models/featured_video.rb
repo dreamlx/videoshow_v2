@@ -82,7 +82,9 @@ class FeaturedVideo
       item.delete 'tags'
       item.delete 'location'
       item.delete 'comments'
-      item['likes'].delete 'data'
+      if item['likes'] != nil
+        item['likes'].delete 'data'
+      end
       item.delete 'caption'
 
       return item
