@@ -15,6 +15,14 @@ ActiveAdmin.register ClientLog do
     column :logfile do |c|
       link_to c.client_log, c.client_log.url
     end
+    column :fileSize do |item|
+       urlStr=Pathname.new(__FILE__).realpath.to_s
+       #item.client_log.to_s
+       urlStr=urlStr[0,urlStr.rindex('/videoshow_v2/')+14]+'public'+item.client_log.to_s
+       f=File.size(urlStr).to_f/1024;
+       (format("%.2f",f).to_f).to_s+"KB"
+       #Dir.pwd item.client_log
+    end
 
     column :check_status do |item|
       if item.check_status
