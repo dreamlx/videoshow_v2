@@ -34,6 +34,6 @@ end
 
 every 1.days do
   # auto likes
-  runner "FeaturedVideo"
+  runner "FeaturedVideo.generate_featured_cache"
 end
 
