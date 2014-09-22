@@ -20,9 +20,28 @@ ActiveAdmin.register FeaturedVideo do
     #redirect_to admin_featured_videos_path, alert: "Successfully recommended. "
   end
 
-  batch_action :Unrecommend, confirm: "Are you sure you want to unrecommend these video?" do |ids|
+  batch_action :UnRecommend, confirm: "Are you sure you want to unrecommend these video?" do |ids|
     FeaturedVideo.find(ids).each do |item|
       item.uncommend!
+    end
+    fvParams = session[:fvParams] 
+    redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+  end
+
+  batch_action :Publish, confirm: "Are you sure you want to publish these video?" do |ids|
+    FeaturedVideo.find(ids).each do |item|
+      item.upBlock!
+    end
+    fvParams = session[:fvParams] 
+    #binding.pry
+    redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    #redirect_to action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
+    #redirect_to admin_featured_videos_path, alert: "Successfully recommended. "
+  end
+
+  batch_action :UnPublish, confirm: "Are you sure you want to unpublish these video?" do |ids|
+    FeaturedVideo.find(ids).each do |item|
+      item.upBlock!
     end
     fvParams = session[:fvParams] 
     redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
@@ -172,11 +191,11 @@ ActiveAdmin.register FeaturedVideo do
       link_to "Delete", {action: "deletes", id: item, page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution],sortParam:params[:sortParam]}, :method => :delete,:class=>"member_link delete_link",:confirm=>"Are you sure you want to delete this?",:rel=>"nofollow"
     end
     
-    column :action2 do |item|
+    column :action do |item|
        link_to 'View', admin_featured_video_path(item),:class=>"member_link view_link"
        #link_to('Delete', deletes_admin_featured_video_path(item), :method => :delete,:class=>"member_link delete_link",:confirm=>"Are you sure you want to delete this?",:rel=>"nofollow") 
     end
-    default_actions
+    #default_actions
   end
 
 
@@ -213,8 +232,8 @@ ActiveAdmin.register FeaturedVideo do
       # end
       items = FeaturedVideo.from_to_start(params[:start_date]).from_to_end(params[:end_date]).from_to_block(params[:unpublish]).from_to_orderNo(params[:orderNo]).from_to_userName(params[:userName]).instagram_param_desc(params[:sortParam]).page(params[:page]||1).per(params[:per_page]||20)
       if !params[:clearCache].blank? && params[:clearCache] =="1"
-        #ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
-        ReqConfigCache.where(:"type".in => ["Recent"]).delete()
+        ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
+        #ReqConfigCache.where(:"type".in => ["Recent"]).delete()
       end
        
       fvParams = {}

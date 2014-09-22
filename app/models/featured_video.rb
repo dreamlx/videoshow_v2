@@ -174,7 +174,7 @@ class FeaturedVideo
       if instagram_collection.size>0 
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
-            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
+            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:true)
             Thread.new{ReqCount.list_req_count(1,0,0,1)}
           else
             item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
@@ -203,7 +203,7 @@ class FeaturedVideo
       if instagram_collection.size>0 
         instagram_collection.reject { |i| i.type != 'video' }.each do |item|
           if FeaturedVideo.where(:'instagram_item.id' => item.id).count == 0
-            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:false)
+            self.create!(instagram_item: item, update_date: Time.now, order_no:0, block_status:true)
             #,created_time:item.created_time
           else
             # item2 = FeaturedVideo.where(:'instagram_item.id' => item.id).first
