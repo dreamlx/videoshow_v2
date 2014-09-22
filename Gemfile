@@ -65,5 +65,5 @@ group :test do
   gem 'launchy'
   gem 'mongoid-rspec'
 end
-gem 'pry-remote'
-gem 'pry-nav'
+#gem 'pry-remote'
+#gem 'pry-nav'
