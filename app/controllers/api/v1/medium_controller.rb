@@ -3,7 +3,8 @@ require 'timeout'
 class Api::V1::MediumController < Api::BaseController
   def featured #featured_collection
     page = params[:page].to_i
-    format_ins = queryCache('Featured',page,10)
+    format_ins = queryCache('Featured',page,30)
+    #format_ins = queryFeaturedCache('Featured',page,10)
     Thread.new{ReqCount.list_req_count(page,0,1,0)}
     #ReqCount.list_req_count(page,0,1)
     #FeaturedVideo.recent()
@@ -24,6 +25,7 @@ class Api::V1::MediumController < Api::BaseController
       if reqConfigCache.update_time < cacheMin.minutes.ago
         reqConfigCache.update_time=Time.new
         reqConfigCache.save
+        #ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
         Thread.new{
             #binding.pry
             format_ins = queryPageFeaturedVideo(type, page)  
@@ -42,7 +44,10 @@ class Api::V1::MediumController < Api::BaseController
     case type
       when "Featured"
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
-          instagrams = FeaturedVideo.filter_blacklist(blist).featured_block_desc.paginate(:page => page, per_page: 10)
+          #instagrams = FeaturedVideo.filter_blacklist(blist).featured_block_desc.paginate(:page => page, per_page: 10)
+          time = Time.new-90.days
+          day = time.strftime("%Y-%m-%d")
+          instagrams = FeaturedVideo.from_to_start(day).featured_block_rand.filter_blacklist(blist).paginate(:page => page, per_page: 10)
       when "Recent"
           #binding.pry
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
@@ -102,8 +107,13 @@ class Api::V1::MediumController < Api::BaseController
     elsif tag == 'auto_likes'
        Thread.new{FeaturedVideo.auto_likes()}
        format_ins={:ret=>"auto_likes running..."}
+    elsif tag == 'generate_featured_cache'
+       #http://localhost:8087/api/v1/medium/getRecentData?tag=generate_featured_cache
+       #http://test.videoshowapp:8087/api/v1/medium/getRecentData?tag=generate_featured_cache
+       #http://api.videoshowapp:8087/api/v1/medium/getRecentData?tag=generate_featured_cache
+       Thread.new{FeaturedVideo.generate_featured_cache()}
+       format_ins={:ret=>"generate_featured_cache running..."}
     else
-      
        format_ins={:ret=>"tag error..."}
     end
     #Category.get_all_tags

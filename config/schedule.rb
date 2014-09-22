@@ -27,8 +27,13 @@ every 4.minutes do
   runner "Category.get_all_tags"
 end
 
+# every 1.days do
+#   # auto likes
+#   runner "FeaturedVideo.auto_likes"
+# end
+
 every 1.days do
   # auto likes
-  runner "FeaturedVideo.auto_likes"
+  runner "FeaturedVideo"
 end
 

@@ -5,6 +5,7 @@ class FeaturedVideo
   field :order_no, :type => Integer, default: 0
   field :block_status, :type => Boolean, default: false
   field :update_date, :type => DateTime
+  field :rand_no, :type => Integer, default: 0
   #field :created_time, :type => String
 
   #default_scope desc(:"instagram_item.created_time").where(:"instagram_item.videos".nin => [nil, ""])
@@ -15,6 +16,8 @@ class FeaturedVideo
   scope :instagram_asc, asc(:"instagram_item.created_time")
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
   scope :featured_block_desc, where(:"order_no".ne => 0,:"block_status" => false).desc(:"order_no").desc(:"instagram_item.created_time")
+  scope :featured_block_rand, where(:"order_no".ne => 0,:"rand_no" => {'$gt' => 0},:"block_status" => false).asc(:"rand_no")
+  
   scope :featuredMaxOrderNo, where(:"order_no".nin => [0]).desc(:"order_no").limit(1)
   scope :instagram_param_desc, ->(sortParam='created_time') {
           #binding.pry
@@ -307,6 +310,44 @@ class FeaturedVideo
     instagrams.all.each do |item|
         item.recommend!
     end
+  end
+
+
+  def self.generate_featured_cache
+    time = Time.new-90.days
+    day = time.strftime("%Y-%m-%d")
+    #binding.pry
+    instagrams = FeaturedVideo.from_to_start(day).where(:"order_no".ne => 0,:"block_status" => false).asc(:"rand_no").limit(1000);
+    instagrams.each do |item|
+      item.rand_no=rand(1000)+1
+      item.save
+    end
+    ReqConfigCache.where(:"type".in => ["Featured"]).delete()
+    #ReqFeaturedIdCache.all.delete()
+  end
+
+
+
+
+
+
+
+  def getRandNum(n, m)
+    s = []
+    ((n-m)...n).each do |j|
+      t = rand(j+2)
+      s.concat s.include?(t) ? [j+1] : [t]
+    end
+    s
+  end
+
+
+  #Utils Rand String
+  def getRandStr( len )
+    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+    newpass = ""
+    1.upto(len) { |i| newpass << chars[rand(chars.size-1)] }
+    return newpass
   end
   
   
