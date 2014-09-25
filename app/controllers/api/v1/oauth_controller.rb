@@ -10,9 +10,11 @@ class Api::V1::OauthController < Api::BaseController
 
   def callback
     response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK)
-    session[:access_token] = response.access_token
+    access_token = response.access_token
+    session[:access_token] = access_token
 
-    redirect_to '/home/callback'
+
+    redirect_to '/home/callback?token='+access_token
   end
 
 end
