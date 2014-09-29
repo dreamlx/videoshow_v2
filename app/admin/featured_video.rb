@@ -9,13 +9,39 @@ ActiveAdmin.register FeaturedVideo do
   #actions :all, except: [:destroy,:edit, :new,:show]
   actions :all, except: [:destroy,:edit, :new]
 
+  # batch_action :flag, form: {
+  #   type: %w[Offensive Spam Other],
+  #   reason: :text,
+  #   notes:  :textarea,
+  #   hide:   :checkbox,
+  #   date:   :datepicker
+  # } do |ids, inputs|
+  #   binding.pry
+  #   redirect_to action: 'index'
+  # end
+
   batch_action :Recommend, confirm: "Are you sure you want to recommend these video?" do |ids|
     FeaturedVideo.find(ids).each do |item|
       item.recommend!
     end
-    fvParams = session[:fvParams] 
+    urlReferer=request.headers['HTTP_REFERER']
+    if urlReferer!=nil && urlReferer.index('?')!=nil
+       urlReferer=urlReferer[urlReferer.index('?')+1,urlReferer.length]
+       paramsArr  = urlReferer.split("&")
+       fvParams = {}
+       paramsArr.each do |str|
+          strArr = str.split("=") 
+          fvParams.store(strArr[0],strArr[1])
+       end
+       redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    else
+       redirect_to action: 'index'
+    end
+    
+
+    #fvParams = session[:fvParams] 
     #binding.pry
-    redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    #redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
     #redirect_to action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
     #redirect_to admin_featured_videos_path, alert: "Successfully recommended. "
   end
@@ -24,35 +50,84 @@ ActiveAdmin.register FeaturedVideo do
     FeaturedVideo.find(ids).each do |item|
       item.uncommend!
     end
-    fvParams = session[:fvParams] 
-    redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    urlReferer=request.headers['HTTP_REFERER']
+    if urlReferer!=nil && urlReferer.index('?')!=nil
+       urlReferer=urlReferer[urlReferer.index('?')+1,urlReferer.length]
+       paramsArr  = urlReferer.split("&")
+       fvParams = {}
+       paramsArr.each do |str|
+          strArr = str.split("=") 
+          fvParams.store(strArr[0],strArr[1])
+       end
+       redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    else
+       redirect_to action: 'index'
+    end
+    #fvParams = session[:fvParams] 
+    #redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
   end
 
   batch_action :Publish, confirm: "Are you sure you want to publish these video?" do |ids|
     FeaturedVideo.find(ids).each do |item|
       item.upBlock!
     end
-    fvParams = session[:fvParams] 
-    #binding.pry
-    redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
-    #redirect_to action: 'index', page:params[:page]||0,per_page:params[:per_page]||20,orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution]
-    #redirect_to admin_featured_videos_path, alert: "Successfully recommended. "
-  end
+    urlReferer=request.headers['HTTP_REFERER']
+    if urlReferer!=nil && urlReferer.index('?')!=nil
+       urlReferer=urlReferer[urlReferer.index('?')+1,urlReferer.length]
+       paramsArr  = urlReferer.split("&")
+       fvParams = {}
+       paramsArr.each do |str|
+          strArr = str.split("=") 
+          fvParams.store(strArr[0],strArr[1])
+       end
+       redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    else
+       redirect_to action: 'index'
+    end
+    #fvParams = session[:fvParams] 
+    #redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+   end
 
   batch_action :UnPublish, confirm: "Are you sure you want to unpublish these video?" do |ids|
     FeaturedVideo.find(ids).each do |item|
       item.upBlock!
     end
-    fvParams = session[:fvParams] 
-    redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    urlReferer=request.headers['HTTP_REFERER']
+    if urlReferer!=nil && urlReferer.index('?')!=nil
+       urlReferer=urlReferer[urlReferer.index('?')+1,urlReferer.length]
+       paramsArr  = urlReferer.split("&")
+       fvParams = {}
+       paramsArr.each do |str|
+          strArr = str.split("=") 
+          fvParams.store(strArr[0],strArr[1])
+       end
+       redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    else
+       redirect_to action: 'index'
+    end
+    #fvParams = session[:fvParams] 
+    #redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
   end
 
   batch_action :Delete, confirm: "Are you sure you want to detete these video?" do |ids|
     FeaturedVideo.find(ids).each do |item|
       item.delete
     end
-    fvParams = session[:fvParams] 
-    redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    urlReferer=request.headers['HTTP_REFERER']
+    if urlReferer!=nil && urlReferer.index('?')!=nil
+       urlReferer=urlReferer[urlReferer.index('?')+1,urlReferer.length]
+       paramsArr  = urlReferer.split("&")
+       fvParams = {}
+       paramsArr.each do |str|
+          strArr = str.split("=") 
+          fvParams.store(strArr[0],strArr[1])
+       end
+       redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
+    else
+       redirect_to action: 'index'
+    end
+    #fvParams = session[:fvParams] 
+    #redirect_to action: 'index', page:fvParams['page'],per_page:fvParams['per_page'],start_date:fvParams['start_date'],end_date:fvParams['end_date'],orderNo:fvParams['orderNo'],userName:fvParams['userName'],unpublish:fvParams['unpublish'],resolution:fvParams['resolution'],sortParam:fvParams['sortParam']
   end
 
   # batch_action :whitelist, :form => {:reason => :text} do |ids, reason|
@@ -239,17 +314,17 @@ ActiveAdmin.register FeaturedVideo do
         #ReqConfigCache.where(:"type".in => ["Recent"]).delete()
       end
        
-      fvParams = {}
-      fvParams.store("page", params[:page]||1)
-      fvParams.store("per_page", params[:per_page]||20)
-      fvParams.store("orderNo", params[:orderNo])
-      fvParams.store("userName", params[:userName])
-      fvParams.store("unpublish", params[:unpublish])
-      fvParams.store("resolution", params[:resolution])
-      fvParams.store("start_date", params[:start_date])
-      fvParams.store("end_date", params[:end_date])
-      fvParams.store("sortParam", params[:sortParam])
-      session[:fvParams] = fvParams
+      # fvParams = {}
+      # fvParams.store("page", params[:page]||1)
+      # fvParams.store("per_page", params[:per_page]||20)
+      # fvParams.store("orderNo", params[:orderNo])
+      # fvParams.store("userName", params[:userName])
+      # fvParams.store("unpublish", params[:unpublish])
+      # fvParams.store("resolution", params[:resolution])
+      # fvParams.store("start_date", params[:start_date])
+      # fvParams.store("end_date", params[:end_date])
+      # fvParams.store("sortParam", params[:sortParam])
+      # session[:fvParams] = fvParams
 
 
       @featured_videos = items
