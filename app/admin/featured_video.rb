@@ -308,7 +308,7 @@ ActiveAdmin.register FeaturedVideo do
       
       blist = BlackList.all.map{|b| b.username}
 
-      items = FeaturedVideo.from_to_start(params[:start_date]).from_to_end(params[:end_date]).from_to_block(params[:unpublish]).from_to_orderNo(params[:orderNo]).from_to_userName(params[:userName]).instagram_param_desc(params[:sortParam]).filter_blacklist(blist).page(params[:page]||1).per(params[:per_page]||20)
+      items = FeaturedVideo.from_to_start(params[:start_date]).from_to_end(params[:end_date]).from_to_block(params[:unpublish]).from_to_orderNo(params[:orderNo]).filter_blacklist(blist).from_to_userName(params[:userName]).instagram_param_desc(params[:sortParam]).page(params[:page]||1).per(params[:per_page]||20)
       if !params[:clearCache].blank? && params[:clearCache] =="1"
         ReqConfigCache.where(:"type".in => ["Featured","Recent"]).delete()
         #ReqConfigCache.where(:"type".in => ["Recent"]).delete()
