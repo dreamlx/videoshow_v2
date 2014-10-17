@@ -4,7 +4,7 @@ class Api::V2::MediumController < Api::BaseController
 
   def featured_new #IOS NEW
     page = params[:page].to_i
-    format_ins = queryCache('Featured',page,10)
+    format_ins = queryCache('Featured',page,30)
     Thread.new{ReqCount.list_req_count(page,0,1,0)}
     data = {}
     if(format_ins != nil && format_ins.size>0)
@@ -49,7 +49,10 @@ class Api::V2::MediumController < Api::BaseController
     case type
       when "Featured"
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
-          instagrams = FeaturedVideo.filter_blacklist(blist).featured_block_desc.paginate(:page => page, per_page: 10)
+          #instagrams = FeaturedVideo.filter_blacklist(blist).featured_block_desc.paginate(:page => page, per_page: 10)
+          time = Time.new-90.days
+          day = time.strftime("%Y-%m-%d")
+          instagrams = FeaturedVideo.from_to_start(day).featured_block_rand.filter_blacklist(blist).paginate(:page => page, per_page: 10)
       when "Recent"
           #binding.pry
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
