@@ -349,6 +349,31 @@ class FeaturedVideo
     1.upto(len) { |i| newpass << chars[rand(chars.size-1)] }
     return newpass
   end
+
+
+  def self.check_del_update
+    time = Time.new-15.days
+    day = time.strftime("%Y-%m-%d")
+    #binding.pry
+    instagrams = FeaturedVideo.from_to_start(day).where(:"block_status" => true).desc(:"instagram_item.created_time").limit(1);
+    instagrams.each do |item|
+      begin
+        #FeaturedVideo.retryable(:tries => 0, :on => Timeout::Error) do
+          timeout(8) do
+            request3 = Typhoeus.get(item.instagram_item['link'])
+            #binding.pry
+            if request3.code == 404 or request3.code == 400 #or request3.code ==0
+              item.delete
+            end
+          end
+        #end
+        #binding.pry
+      rescue #=> err
+        logger.info "[ERROR][check_del_update]============================== :#{$!} at:#{$@}"
+      end 
+    end
+    
+  end
   
   
 end

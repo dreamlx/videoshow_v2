@@ -113,6 +113,12 @@ class Api::V1::MediumController < Api::BaseController
        #http://api.videoshowapp:8087/api/v1/medium/getRecentData?tag=generate_featured_cache
        Thread.new{FeaturedVideo.generate_featured_cache()}
        format_ins={:ret=>"generate_featured_cache running..."}
+    elsif tag == 'check_del_update'
+       #http://localhost:8087/api/v1/medium/getRecentData?tag=check_del_update
+       #http://test.videoshowapp:8087/api/v1/medium/getRecentData?tag=check_del_update
+       #http://api.videoshowapp:8087/api/v1/medium/getRecentData?tag=check_del_update
+       Thread.new{FeaturedVideo.check_del_update()}
+       format_ins={:ret=>"check_del_update running..."}
     else
        format_ins={:ret=>"tag error..."}
     end

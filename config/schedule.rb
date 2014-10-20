@@ -37,3 +37,8 @@ every 1.days do
   runner "FeaturedVideo.generate_featured_cache"
 end
 
+every 1.days, :at => '0:30 am' do
+  # video delete check update 
+  runner "FeaturedVideo.check_del_update"
+end
+
