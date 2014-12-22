@@ -5,8 +5,12 @@ ActiveAdmin.register ClientLog do
 
   config.filters =false
 
+  
+
   index do
     selectable_column
+
+    upload_status = (ClientLogSwitch.first).upload_status
 
     column :os_version
     column :app_version
@@ -31,10 +35,21 @@ ActiveAdmin.register ClientLog do
         link_to('check', check_admin_client_log_path(item), :method => :put,:class => 'button')
       end
     end
+
+    column :upload_status do |item|
+      if upload_status
+        link_to('upload_cancel', uploadcancel_admin_client_log_path(item), :method => :put,:class => 'button') 
+      else
+        link_to('upload_check', uploadcheck_admin_client_log_path(item), :method => :put,:class => 'button')
+      end
+    end
   end
 
   controller do
     def index
+      #binding.pry
+      upload_status = (ClientLogSwitch.first).upload_status
+
       items = ClientLog.all
       if params[:start_date].blank? or params[:end_date].blank?
         # skip
@@ -48,6 +63,19 @@ ActiveAdmin.register ClientLog do
 
       @client_logs = items.page(params[:page]).per(params[:per_page]||20)
     end
+
+    # def new
+    #   #render :file => 'admin/home_top_adverts/newUpload.rhtml'
+    #   #render :file => 'admin/home_top_adverts/new.html.erb'
+    #   #binding.pry
+    #   #@home_top_advert = HomeTopAdvert.new
+    #   #respond_to do |format|
+    #     #format.html # new.html.erb
+    #   #  format.html { render '/admin/home_top_adverts/new.html.erb'}
+    #   #  format.json { render :json => @home_top_advert }
+    #   #end
+    #   super
+    # end
   end
   member_action :cancel, :method => :put do
     item = ClientLog.find(params[:id])
@@ -58,6 +86,19 @@ ActiveAdmin.register ClientLog do
   member_action :check, :method => :put do
     item = ClientLog.find(params[:id])
     item.check!
+    redirect_to  admin_client_logs_path
+  end  
+
+
+  member_action :uploadcancel, :method => :put do
+    clientLogSwitch = ClientLogSwitch.first
+    clientLogSwitch.cancel!
+    redirect_to  admin_client_logs_path
+  end
+
+  member_action :uploadcheck, :method => :put do
+    clientLogSwitch = ClientLogSwitch.first
+    clientLogSwitch.check!
     redirect_to  admin_client_logs_path
   end  
 end

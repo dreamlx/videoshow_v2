@@ -7,7 +7,7 @@ ActiveAdmin.register FeaturedVideo do
   config.filters =false
 
   #actions :all, except: [:destroy,:edit, :new,:show]
-  actions :all, except: [:destroy,:edit, :new]
+  actions :all, except: [:destroy, :new]
 
   # batch_action :flag, form: {
   #   type: %w[Offensive Spam Other],
@@ -266,11 +266,11 @@ ActiveAdmin.register FeaturedVideo do
       link_to "Delete", {action: "deletes", id: item, page:params[:page]||0,per_page:params[:per_page]||20,start_date:params[:start_date],end_date:params[:end_date],orderNo:params[:orderNo],userName:params[:userName],unpublish:params[:unpublish],resolution:params[:resolution],sortParam:params[:sortParam]}, :method => :delete,:class=>"member_link delete_link",:confirm=>"Are you sure you want to delete this?",:rel=>"nofollow"
     end
     
-    column :action do |item|
-       link_to 'View', admin_featured_video_path(item),:class=>"member_link view_link"
+    #column :action do |item|
+    #   link_to 'View', admin_featured_video_path(item),:class=>"member_link view_link"
        #link_to('Delete', deletes_admin_featured_video_path(item), :method => :delete,:class=>"member_link delete_link",:confirm=>"Are you sure you want to delete this?",:rel=>"nofollow") 
-    end
-    #default_actions
+    #end
+    default_actions
   end
 
 
