@@ -16,7 +16,9 @@ class Api::V1::MediumController < Api::BaseController
     format_ins = []
     configId = "Cache"+type+page.to_s
     #FeaturedVideo.recent('videoshowapp') 
+    #binding.pry
     reqConfigCache = ReqConfigCache.where(:'configId' => configId).first
+    #binding.pry
     if(reqConfigCache == nil )
       format_ins = queryPageFeaturedVideo(type,page)
       ReqConfigCache.create!(configId: configId, type: type,page:page,content: format_ins,update_time:Time.new)
@@ -45,6 +47,7 @@ class Api::V1::MediumController < Api::BaseController
       when "Featured"
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured_block_desc.paginate(:page => page, per_page: 10)
+          #binding.pry
           time = Time.new-90.days
           day = time.strftime("%Y-%m-%d")
           instagrams = FeaturedVideo.from_to_start(day).featured_block_rand.filter_blacklist(blist).paginate(:page => page, per_page: 10)
@@ -60,6 +63,9 @@ class Api::V1::MediumController < Api::BaseController
       item = i.format_me
       #item.store("order_no",i.order_no)
       item.store("vs_stick", i.order_no>1?1:0) #Client Stick
+      #binding.pry
+      item['user'].store("website","")
+      item['user'].store("bio","")
       #item.store("vs_page", page)
       format_ins << item
       #end
