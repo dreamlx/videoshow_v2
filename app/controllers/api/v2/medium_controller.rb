@@ -50,7 +50,7 @@ class Api::V2::MediumController < Api::BaseController
       when "Featured"
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured.has_video.instagram_desc.paginate(:page => page, per_page: 10)
           #instagrams = FeaturedVideo.filter_blacklist(blist).featured_block_desc.paginate(:page => page, per_page: 10)
-          time = Time.new-90.days
+          time = Time.new-31.days
           day = time.strftime("%Y-%m-%d")
           instagrams = FeaturedVideo.from_to_start(day).featured_block_rand.filter_blacklist(blist).paginate(:page => page, per_page: 10)
       when "Recent"

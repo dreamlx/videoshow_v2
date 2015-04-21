@@ -16,7 +16,7 @@ class FeaturedVideo
   scope :instagram_asc, asc(:"instagram_item.created_time")
   scope :featured, where(:"order_no".nin => [nil, "", 0]).desc(:"order_no")
   scope :featured_block_desc, where(:"order_no".ne => 0,:"block_status" => false).desc(:"order_no").desc(:"instagram_item.created_time")
-  scope :featured_block_rand, where(:"order_no".ne => 0,:"rand_no" => {'$gt' => 0},:"block_status" => false).asc(:"rand_no")
+  scope :featured_block_rand, where(:"order_no".ne => 0,:"rand_no" => {'$gt' => 0},:"block_status" => false).desc(:"order_no").asc(:"rand_no")
   
   scope :featuredMaxOrderNo, where(:"order_no".nin => [0]).desc(:"order_no").limit(1)
   scope :instagram_param_desc, ->(sortParam='created_time') {
@@ -314,7 +314,7 @@ class FeaturedVideo
 
 
   def self.generate_featured_cache
-    time = Time.new-90.days
+    time = Time.new-31.days
     day = time.strftime("%Y-%m-%d")
     #binding.pry
     instagrams = FeaturedVideo.from_to_start(day).where(:"order_no".ne => 0,:"block_status" => false).asc(:"rand_no").limit(1000);
